@@ -1,0 +1,40 @@
+{
+  "name": "fa-forever",
+  "description": "chenyifaer",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "umi dev",
+    "build": "umi build",
+    "lint": "eslint --ext .js src test",
+    "precommit": "npm run lint",
+    "dev": "electron .",
+    "packager": "electron-packager ./src FA-FOREVER --all --out=./build --icon=./src/favicon.ico --electron-version=2.0.6 --overwrite",
+    "pack": "electron-builder --dir",
+    "ebuild": "electron-builder"
+  },
+  "main": "./src/main.js",
+  "devDependencies": {
+    "electron": "^2.0.6",
+    "electron-builder": "^20.27.1",
+    "eslint": "^5.3.0",
+    "jest": "^23.4.2"
+  },
+  "author": "rojer",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0-beta.56",
+    "flyio": "^0.6.0",
+    "mobx": "^5.0.3",
+    "mobx-react": "^5.2.3",
+    "umi": "^1.3.18",
+    "umi-plugin-routes": "^0.1.5"
+  },
+  "build": {
+    "win": {
+      "icon": "./src/favicon.ico"
+    },
+    "mac": {
+      "icon": "./src/favicon.icns"
+    }
+  }
+}

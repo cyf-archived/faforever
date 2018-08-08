@@ -1,0 +1,27 @@
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+@font-face{
+  font-family: "font-poem-2527";
+  src: url("./assets/2527.ttf") format("TrueType"),
+  url("./assets/2527.woff") format("woff");
+  font-display: swap;
+}
+
+::-webkit-scrollbar {/*滚动条整体样式*/
+  width: 7px;     /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+
+::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+  border-radius: 6px;
+  background: rgb(163, 163, 163);
+}
+
+::-webkit-scrollbar-track {/*滚动条里面轨道*/
+  border-radius: 6px;
+  background: #EDEDED;
+}

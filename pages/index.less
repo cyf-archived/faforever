@@ -1,0 +1,16 @@
+.container{
+  min-height: ~'calc(100vh - 50px - 70px)';
+  max-height: ~'calc(100vh - 50px - 70px)';
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  :global{
+    .ant-spin-container{
+      min-height: 50vh;
+      user-select: none;
+      .ant-table-row{
+        cursor: pointer;
+      }
+    }
+  }
+}
