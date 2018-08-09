@@ -17,7 +17,7 @@ function createWindow () {
 
 
   //系统托盘图标目录
-  const trayIcon = path.join(__dirname, 'favicon.ico');
+  const trayIcon = path.join(__dirname, 'yjtp16.png');
   appTray = new Tray(trayIcon);
 
   //设置此托盘图标的悬停提示内容
@@ -31,9 +31,9 @@ function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1000,
-    height: 800,
+    height: 700,
     frame: false,
-    titleBarStyle: 'hidden',
+    titleBarStyle: 'customButtonsOnHover',
     webPreferences: {
       webSecurity: false,
       allowDisplayingInsecureContent: true,
@@ -88,5 +88,5 @@ ipcMain.on('window-min',function(){
 })
 
 ipcMain.on('window-close',function(){
-  mainWindow.close();
+  app.quit();
 })
