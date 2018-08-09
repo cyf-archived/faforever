@@ -15,6 +15,7 @@ class Criteria extends React.Component {
     isPlay: false,
     currentTime: 0,
     duration: 0,
+    mode: 1,
   }
 
   componentDidMount() {
@@ -24,7 +25,7 @@ class Criteria extends React.Component {
     this.audio.addEventListener('pause', this.pause);
     this.audio.addEventListener('canplay', () => { console.log('canplay'); this.audio.play(); });
     this.audio.addEventListener('durationchange ', (e) => { console.log('durationchange', e); });
-    this.audio.addEventListener('ended', () => { this.props.music.playNext(); });
+    this.audio.addEventListener('ended', () => { this.props.music.playNext(this.state.mode); });
     this.audio.addEventListener('waiting', () => { console.log('waiting'); this.setState({ downloading: true }) });
     this.audio.addEventListener('loadstart', () => { console.log('loadstart'); this.setState({ downloading: true }) });
     this.audio.addEventListener('canplaythrough', () => { console.log('loadstart'); this.setState({ downloading: false }) });
@@ -66,8 +67,6 @@ class Criteria extends React.Component {
 
   handleChange = (value) => {
     this.audio.volume = value;
-    console.log(value);
-
     this.setState({ volume: value });
   }
 
@@ -82,37 +81,67 @@ class Criteria extends React.Component {
     return `${parseInt(value * 100, 10)}%`;
   }
 
+  toggleMode = (mode) => {
+    this.setState({
+      mode: mode
+    })
+  }
+
   render() {
     return <div className={sty.player}>
+      <div className='music-title'>
+        <img src={require('../assets/avatar.png')} className='avatar' alt='' />
+        <div className='box'>
+          <div className='title'>
+            { this.state.downloading ? <Icon type="loading" /> : null }{this.props.music.song.title || '-'}
+          </div>
+          <div>
+            {(this.props.music.song.additional && this.props.music.song.additional.song_tag.artist) || '-'}
+          </div>
+        </div>
+
+      </div>
       <audio
         ref="audio"
         autoPlay
         controls
-        loop={false}
+        loop={this.state.mode === 2}
         src={ this.props.music.url }
       >
-        Your browser does not support the audio element.
       </audio>
 
       <div className='control'>
-        <Button type="primary" shape="circle" icon="step-backward" onClick={() => { this.props.music.playPre(); }} />
+        <Button type="primary" shape="circle" icon="step-backward" onClick={() => { this.props.music.playPre(this.state.mode); }} />
         <Button type="primary" shape="circle" icon={this.state.isPlay ? 'pause' : 'caret-right'} size='large' onClick={this.toggle} />
-        <Button type="primary" shape="circle" icon="step-forward" onClick={() => { this.props.music.playNext(); }} />
+        <Button type="primary" shape="circle" icon="step-forward" onClick={() => { this.props.music.playNext(this.state.mode); }} />
       </div>
 
       <div className='prppress'>
-
-        <div style={{ marginLeft: 6 }}>{ this.state.downloading ? <Icon type="loading" /> : null }{this.props.music.song.title || '无播放音乐'}
-        &nbsp;&nbsp;
+        <div>
         {`${Math.floor(Number(this.state.currentTime) / 60)}:${this.state.currentTime % 60 < 10 ? '0' + this.state.currentTime % 60 : this.state.currentTime % 60}`}
-        /
-        {`${Math.floor(Number(this.state.duration) / 60)}:${this.state.duration % 60 < 10 ? '0' + this.state.duration % 60 : this.state.duration % 60 }`} </div>
+        </div>
         <Slider value={this.state.percent} tipFormatter={null} step={0.01} onChange={this.handleChangePercent}/>
+
+        <div>
+          {`${Math.floor(Number(this.state.duration) / 60)}:${this.state.duration % 60 < 10 ? '0' + this.state.duration % 60 : this.state.duration % 60 }`}
+        </div>
       </div>
 
       <div className='sound'>
-        <Icon type="sound" />
+      <i className="fa-icon" >&#xe662;</i>
         <Slider value={this.state.volume} onChange={this.handleChange} step={0.01} min={0} max={1} tipFormatter={this.formatter} />
+      </div>
+
+      <div className='actions'>
+        {
+          this.state.mode === 1 && <i className="fa-icon" onClick={() => {this.toggleMode(2)} }>&#xe609;</i>
+        }
+        {
+          this.state.mode === 2 && <i className="fa-icon" onClick={() => {this.toggleMode(3)} }>&#xe66d;</i>
+        }
+        {
+          this.state.mode === 3 && <i className="fa-icon" onClick={() => {this.toggleMode(1)} }>&#xe622;</i>
+        }
       </div>
 
     </div>;

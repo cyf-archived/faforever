@@ -41,11 +41,17 @@ function createWindow () {
     },
   })
 
+  if (process.env.FA_NODE_ENV === 'dev') {
+    mainWindow.loadURL(`http://localhost:8000/`)
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools()
+  } else {
+    mainWindow.loadURL(`http://cdn.eqistu.cn/faforever/index.html?t=${(new Date()).valueOf()}`)
+    // mainWindow.webContents.openDevTools()
+  }
   // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/dist/index.html`)
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

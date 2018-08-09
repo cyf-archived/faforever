@@ -3,9 +3,9 @@ const host = 'http://magict.cn:5000/webapi';
 
 // 获取列表
 export const getEntry = () => {
-  return request(`${host}/entry.cgi`, {
+  return request(`${host}/AudioStation/album.cgi`, {
     method: 'POST',
-    data: 'api=SYNO.AudioStation.Pin&method=list&version=1&library=all&limit=5000&offset=0',
+    data: 'api=SYNO.AudioStation.Album&method=list&version=1&library=all&sort_direction=asc&offset=0&sort_by=name&limit=5000',
   });
 };
 

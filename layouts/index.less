@@ -20,7 +20,7 @@
         flex-grow: 1;
       }
       .action{
-        .anticon{
+        .anticon,.fa-icon{
           cursor: pointer;
           margin-left: 8px;
         }
@@ -43,12 +43,17 @@
           list-style: none;
           width: 220px;
           li{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             height: 40px;
-            line-height: 40px;
             padding-left: 10px;
             color: #111111;
             cursor: pointer;
             border-left: 3px solid transparent;
+            span{
+              margin-right: auto;
+            }
             &.active{
               background-color: rgb(230, 231, 234);
               color: #000000;

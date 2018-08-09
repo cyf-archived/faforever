@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from "mobx-react";
-import { Table } from 'antd';
+import { List } from 'antd';
 import 'moment/locale/zh-cn';
 
 import * as sty from './index.less';
@@ -10,11 +10,11 @@ import * as sty from './index.less';
 class Index extends React.Component {
   columns = [
     {
-      dataIndex: 'id',
-      title: 'ID',
-      width: 85,
+      dataIndex: 'playing',
+      title: '',
+      width: 20,
       render: (text) => {
-        return text.replace('music_', '')
+        return <i className="fa-icon spin"></i>;
       }
     },
     {
@@ -43,21 +43,29 @@ class Index extends React.Component {
   render() {
     return (
       <div className={sty.container}>
-        <Table
-          rowKey='id'
+        <List
           size='small'
-          loading={this.props.music.songs.length === 0}
-          pagination={false}
-          dataSource={this.props.music.songs}
-          columns={this.columns}
-          onRow={(record) => {
-            return {
-              onDoubleClick: () => {
-                this.props.music.play(record);
-              },
-            };
-          }}
-        ></Table>
+          dataSource={this.props.music.current_songs}
+          header={
+            <List.Item className='header-box'>
+              <div className='playing'></div>
+              <div className='title'>标题</div>
+              <div className='album'>专辑</div>
+              <div className='artist'>演唱</div>
+              <div className='duration'>时长</div>
+            </List.Item>
+          }
+          renderItem={item => (<List.Item onDoubleClick={() => {
+            this.props.music.play(item);
+          }} >
+            <div className='playing'>{item.playing && <i className="fa-icon spin">&#xe61f;</i>}</div>
+            <div className='title'>{item.title}</div>
+            <div className='album'>{item.additional.song_tag.album}</div>
+            <div className='artist'>{item.additional.song_tag.artist}</div>
+            <div className='duration'> {`${Math.floor(Number(item.additional.song_audio.duration) / 60)}:${item.additional.song_audio.duration % 60}`}</div>
+          </List.Item>)}
+        >
+        </List>
       </div>
     )
   }

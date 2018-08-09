@@ -7,10 +7,8 @@
     "build": "umi build",
     "lint": "eslint --ext .js src test",
     "precommit": "npm run lint",
-    "dev": "electron .",
-    "packager": "electron-packager ./src FA-FOREVER --all --out=./build --icon=./src/favicon.ico --electron-version=2.0.6 --overwrite",
-    "pack": "electron-builder --dir",
-    "ebuild": "electron-builder"
+    "dev": "set FA_NODE_ENV=dev&&electron .",
+    "preview": "set FA_NODE_ENV=prd&&electron ."
   },
   "main": "./src/main.js",
   "devDependencies": {
