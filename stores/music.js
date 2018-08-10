@@ -1,6 +1,21 @@
-import { observable, flow, action } from 'mobx';
+import { observable, flow } from 'mobx';
 import { getEntry, getSongs, download } from '../apis';
 import { message } from 'antd';
+
+let remote
+let ipcRenderer
+let cache
+
+if (window.require) {
+  const electron = window.require('electron');
+  ({ remote, ipcRenderer } = electron);
+  try {
+    if (remote.require) {
+      cache = remote.require('./cache')
+    }
+  } catch (error) {
+  }
+}
 
 class Store {
   @observable criteria;
@@ -62,10 +77,22 @@ class Store {
     }
   })
 
-  @action toggle = (criteria) => {
+  toggle = flow(function *(criteria) {
     this.current_criteria = criteria;
-    this.current_songs = this.songs[criteria];
-  }
+    if (this.songs[criteria]) {
+      const data = [];
+      for (let index = 0; index < this.songs[criteria].length; index++) {
+        const element = this.songs[criteria][index];
+        data.push({
+          ...element,
+          url: yield download(element.id),
+          playing: element.id === this.song.id,
+          cached: cache && cache.exist(element.id),
+        })
+      }
+      this.current_songs = data
+    }
+  })
 
   play = flow(function *(song, dclick = true) {
     this.song = song
@@ -76,10 +103,19 @@ class Store {
     this.current_songs = this.current_songs.map(i => {
       return {
         ...i,
-        playing: i.id === song.id
+        playing: i.id === song.id,
       };
     });
-    this.url = yield download(song.id);
+
+    if (cache && cache.exist(song.id)) {
+      this.url = cache && cache.path(song.id);
+    } else {
+      this.url = yield download(song.id);
+      if (cache) {
+        message.info('开始缓存：' + cache.path(song.id))
+        ipcRenderer && ipcRenderer.send('cache', this.url, song.id);
+      }
+    }
   })
 
   playNext = flow(function *(mode) {

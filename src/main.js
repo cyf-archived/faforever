@@ -5,7 +5,7 @@ const path = require('path')
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let appTray
-
+let downloadId
 
 function createWindow () {
 
@@ -61,6 +61,13 @@ function createWindow () {
     mainWindow = null
     appTray = null
   })
+
+  mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
+    //设置文件存放位置
+    item.setSavePath(
+      path.join(app.getAppPath(), `../cache/${downloadId}.mp3`)
+    );
+  })
 }
 
 // This method will be called when Electron has finished
@@ -96,3 +103,8 @@ ipcMain.on('window-min',function(){
 ipcMain.on('window-close',function(){
   app.quit();
 })
+
+ipcMain.on('cache', (evt, url, id) => {
+  downloadId = id
+  mainWindow.webContents.downloadURL(url);
+});

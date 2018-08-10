@@ -1,7 +1,7 @@
 {
   "name": "fa-forever",
   "description": "chenyifaer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "start": "umi dev",
     "build": "umi build",
@@ -28,6 +28,10 @@
     "umi-plugin-routes": "^0.1.5"
   },
   "build": {
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
     "win": {
       "icon": "./src/favicon.ico"
     },

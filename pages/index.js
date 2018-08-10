@@ -58,11 +58,16 @@ class Index extends React.Component {
           renderItem={item => (<List.Item onDoubleClick={() => {
             this.props.music.play(item);
           }} >
-            <div className='playing'>{item.playing && <i className="fa-icon spin">&#xe61f;</i>}</div>
+            <div className='playing'>
+              {item.playing && <i className="fa-icon spin" style={{ color: '#c62f2f', }} >&#xe61f;</i>}
+            </div>
             <div className='title'>{item.title}</div>
             <div className='album'>{item.additional.song_tag.album}</div>
             <div className='artist'>{item.additional.song_tag.artist}</div>
-            <div className='duration'> {`${Math.floor(Number(item.additional.song_audio.duration) / 60)}:${item.additional.song_audio.duration % 60}`}</div>
+            <div className='duration'>
+              {`${Math.floor(Number(item.additional.song_audio.duration) / 60)}:${item.additional.song_audio.duration % 60}`}
+              { item.cached && <i style={{ marginLeft: 4, color: '#c62f2f', fontSize: 12 }} className="fa-icon">&#xe61a;</i> }
+            </div>
           </List.Item>)}
         >
         </List>
