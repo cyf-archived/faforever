@@ -1,17 +1,36 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, Menu, ipcMain, Tray, session } = require('electron')
 const path = require('path')
+const fly = require("flyio");
+const Store = require('electron-store');
+const store = new Store({
+  cwd: path.join(app.getAppPath(), `../`)
+});
+
+const username = store.get('username') || 'cyfwlp';
+const password = store.get('password') || '5267373';
+if (username === 'cyfwlp' && password === '5267373') {
+  store.set('username', 'cyfwlp');
+  store.set('password', '5267373');
+}
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let appTray
 let downloadId
+let cookie
 
 function createWindow () {
+  fly.request('http://magict.cn:5000/webapi/auth.cgi?api=SYNO.API.Auth&version=3&method=login&account=' + username +'&passwd='+ password +'&session=AudioStation&format=cookie').then((_) => {
+    if (_.headers['set-cookie']) {
+      cookie = _.headers['set-cookie'].split(';', 2)[0]
+      console.log(cookie);
+    }
+  })
 
   session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
     details.requestHeaders['User-Agent'] = 'DS audio 5.15.0 rv:345 (iPhone; iOS 11.3; zh_CN)'
-    details.requestHeaders['Cookie'] = 'id=wb5HywrgcmGxE1330ODN615672'
+    details.requestHeaders['Cookie'] = cookie
     callback({ cancel: false, requestHeaders: details.requestHeaders })
   })
 

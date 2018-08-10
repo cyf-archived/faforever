@@ -21,11 +21,14 @@ configure({ enforceActions: true });
 
 class Index extends React.Component {
   componentDidMount() {
-    if (localStorage['version'] !== '2') {
-      localStorage['version'] = '2'
+    if (localStorage['version'] !== '3') {
+      localStorage['version'] = '3'
       notification.open({
-        message: 'V1.0.2 测试版开始测试',
+        duration: 8888,
+        message: 'V1.0.3 ',
         description: <div>
+          <b>之前的版本不能用了，大家去下载这个版本吧</b>
+          <br/>
           本次主要测试内容为：
           <br/>
           1、安装包可以选择安装目录
@@ -33,7 +36,7 @@ class Index extends React.Component {
           2、自动下载并缓存音乐
           <br/>
           <br/>
-          PS：下载地址还是在网盘
+          PS：下载地址还是在网盘：https://pan.baidu.com/s/1iTbYgMSmJEWyLJecPmomNw
         </div>,
       });
     }
