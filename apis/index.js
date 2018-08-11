@@ -22,3 +22,7 @@ export const getSongs = (album, album_artist) => {
 export const download = (id) => {
   return `${host}/AudioStation/stream.cgi?api=SYNO.AudioStation.Stream&method=stream&version=1&id=${id}&seek_position=0`;
 };
+
+export const note = () => {
+  return request(`http://cdn.eqistu.cn/faforever/note.txt?t=${(new Date().valueOf())}`);
+}

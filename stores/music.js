@@ -1,5 +1,5 @@
-import { observable, flow } from 'mobx';
-import { getEntry, getSongs, download } from '../apis';
+import { observable, flow, action, runInAction } from 'mobx';
+import { getEntry, getSongs, download, note } from '../apis';
 import { message } from 'antd';
 
 let remote
@@ -26,6 +26,8 @@ class Store {
   @observable loading;
   @observable url;
   @observable currentList;
+  @observable note;
+  @observable listloading;
 
   constructor() {
     this.criteria = localStorage['criteria'] ? JSON.parse(localStorage['criteria']) : [];
@@ -35,7 +37,9 @@ class Store {
     this.current_songs = [];
     this.song = {};
     this.loading = true;
+    this.listloading = false;
     this.url = '';
+    this.note = ''
   }
 
   reload = flow(function *() {
@@ -48,6 +52,7 @@ class Store {
   })
 
   loadCriteria = flow(function *() {
+    this.note = (yield note()).data;
     if (this.criteria.length === 0 || Object.keys(this.songs).length === 0) {
       const hide = message.loading('首次缓存，需要一段时间，请耐心等待', 0)
       try {
@@ -77,24 +82,33 @@ class Store {
     }
   })
 
-  toggle = flow(function *(criteria) {
+  @action toggle = (criteria) => {
+    this.current_songs = [];
+    this.listloading = true;
     this.current_criteria = criteria;
     if (this.songs[criteria]) {
-      const data = [];
-      for (let index = 0; index < this.songs[criteria].length; index++) {
-        const element = this.songs[criteria][index];
-        data.push({
-          ...element,
-          url: yield download(element.id),
-          playing: element.id === this.song.id,
-          cached: cache && cache.exist(element.id),
-        })
-      }
-      this.current_songs = data
+      runInAction(() => {
+        const data = [];
+        for (let index = 0; index < this.songs[criteria].length; index++) {
+          const element = this.songs[criteria][index];
+          data.push({
+            ...element,
+            url: download(element.id),
+            playing: element.id === this.song.id,
+            cached: cache && cache.exist(element.id),
+          })
+        }
+        this.current_songs = data
+        this.listloading = false;
+      })
+    } else {
+      this.listloading = false;
     }
-  })
 
-  play = flow(function *(song, dclick = true) {
+
+  }
+
+  @action play = (song, dclick = true) => {
     this.song = song
     if (dclick) {
       this.currentList = this.current_songs
@@ -110,15 +124,15 @@ class Store {
     if (cache && cache.exist(song.id)) {
       this.url = cache && cache.path(song.id);
     } else {
-      this.url = yield download(song.id);
+      this.url = download(song.id);
       if (cache) {
         message.info('开始缓存：' + cache.path(song.id))
         ipcRenderer && ipcRenderer.send('cache', this.url, song.id);
       }
     }
-  })
+  }
 
-  playNext = flow(function *(mode) {
+  @action playNext = (mode) => {
     if (this.currentList.length > 0 && this.song.id) {
 
       if (mode === 2) { // 单曲
@@ -128,7 +142,7 @@ class Store {
       if (mode === 3) { // 单曲
         const index = Math.floor(Math.random()* this.currentList.length);
         const song = { ...this.currentList[index] }
-        yield this.play(song, false);
+        this.play(song, false);
         return;
       }
 
@@ -143,13 +157,13 @@ class Store {
       index += 1;
       index = index < this.currentList.length ? index : 0;
       const song = { ...this.currentList[index] }
-      yield this.play(song, false);
+      this.play(song, false);
 
     }
-  })
+  }
 
 
-  playPre = flow(function *(mode) {
+  @action playPre = (mode) => {
     if (this.currentList.length > 0 && this.song.id) {
 
       if (mode === 2) { // 单曲
@@ -159,7 +173,7 @@ class Store {
       if (mode === 3) { // 单曲
         const index = Math.floor(Math.random()* this.currentList.length);
         const song = { ...this.currentList[index] }
-        yield this.play(song, false);
+        this.play(song, false);
         return;
       }
 
@@ -173,10 +187,36 @@ class Store {
       index -= 1;
       index = index < 0 ? 0 : index;
       const song = { ...this.currentList[index] }
-      yield this.play(song, false);
+      this.play(song, false);
       return;
     }
-  })
+  }
+
+  @action search = (key) => {
+    if (!key) {
+      return;
+    }
+    this.listloading = true;
+    const allSongs = Object.keys(this.songs).reduce((res, key) => {
+      for (const song of this.songs[key]) {
+        res.push({
+          ...song,
+        })
+      }
+      return res;
+    }, [])
+
+    const filterSongs = allSongs.filter(song => song.title.indexOf(key) !== -1).map((song) =>({
+      ...song,
+      url: download(song.id),
+      playing: song.id === this.song.id,
+      cached: cache && cache.exist(song.id),
+    }));
+
+    this.current_songs = filterSongs
+    this.current_criteria = '';
+    this.listloading = false;
+  }
 
 }
 

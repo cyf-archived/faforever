@@ -34,7 +34,16 @@
       "allowToChangeInstallationDirectory": true
     },
     "win": {
-      "icon": "./src/favicon.ico"
+      "icon": "./src/favicon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     },
     "mac": {
       "icon": "./src/favicon.icns"

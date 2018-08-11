@@ -11,19 +11,37 @@
       justify-content: space-between;
       align-items: center;
       padding: 0 20px;
+      overflow: hidden;
+      -webkit-app-region: drag;
+
       .logo{
         font-size: 30px;
         font-family: font-poem-2527;
-        -webkit-app-region: drag;
         height: 50px;
         line-height: 50px;
         flex-grow: 1;
       }
       .action{
+        -webkit-app-region: no-drag;
+
         .anticon,.fa-icon{
           cursor: pointer;
           margin-left: 8px;
         }
+      }
+
+      .am-search{
+        margin-right: 50px;
+        -webkit-app-region: no-drag;
+        background-color: transparent;
+        .am-search-cancel{
+          color: #FFFFFF;
+          cursor: pointer;
+        }
+        *{
+          -webkit-app-region: no-drag;
+        }
+        min-width: 350px;
       }
     }
 
@@ -68,6 +86,7 @@
       }
       .content{
         flex-grow: 1;
+        position: relative;
       }
     }
   }

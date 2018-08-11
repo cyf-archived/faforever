@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from "mobx-react";
 import { List } from 'antd';
+import { NoticeBar } from 'antd-mobile';
 import 'moment/locale/zh-cn';
 
 import * as sty from './index.less';
@@ -43,9 +44,15 @@ class Index extends React.Component {
   render() {
     return (
       <div className={sty.container}>
+        { this.props.music.note && <NoticeBar marqueeProps={{ loop: true, leading: 2000, trailing: 2000, style: { padding: '0 7.5px' } }}>
+          { this.props.music.note }
+        </NoticeBar>}
+        { this.props.music.note && <div style={{ height: 42 }}></div> }
+
         <List
           size='small'
           dataSource={this.props.music.current_songs}
+          loading={this.props.music.listloading}
           header={
             <List.Item className='header-box'>
               <div className='playing'></div>

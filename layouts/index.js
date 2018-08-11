@@ -3,6 +3,8 @@ import { Icon, LocaleProvider, Modal, Tooltip, notification } from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
+import { SearchBar } from 'antd-mobile';
+
 import Criteria from '../components/criteria';
 import Player from '../components/player';
 import 'moment/locale/zh-cn';
@@ -69,6 +71,7 @@ class Index extends React.Component {
           <div className={sty.container}>
             <div className='header'>
               <div className='logo'>FA FOREVER</div>
+              <SearchBar placeholder='搜索歌曲' onSubmit={stores.music.search}/>
               <div className='action'>
               <Tooltip placement="topLeft" title="当你发现歌库数据不完整时，可以点这里重新缓存歌曲数据">
                 <i className="fa-icon" onClick={this.reload}>&#xe6ba;</i>
