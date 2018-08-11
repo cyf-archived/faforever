@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from "mobx-react";
-import { Button, Slider, Icon } from 'antd';
+import { Button, Slider, Icon, message } from 'antd';
 
 import * as sty from './player.less';
 
@@ -28,8 +28,16 @@ class Criteria extends React.Component {
     this.audio.addEventListener('ended', () => { this.props.music.playNext(this.state.mode); });
     this.audio.addEventListener('waiting', () => { console.log('waiting'); this.setState({ downloading: true }) });
     this.audio.addEventListener('loadstart', () => { console.log('loadstart'); this.setState({ downloading: true }) });
-    this.audio.addEventListener('canplaythrough', () => { console.log('loadstart'); this.setState({ downloading: false }) });
-    this.audio.addEventListener('error', () => { console.log('loadstart'); this.setState({ downloading: false }) });
+    this.audio.addEventListener('canplaythrough', () => { console.log('canplaythrough'); this.setState({ downloading: false }) });
+    this.audio.addEventListener('error', () => { console.log('error');
+      this.setState({ downloading: false });
+      if (this.props.music.url) {
+        message.error(`播放失败，请检查网络/留意公告。`)
+        setTimeout(() => {
+          this.props.music.playNext(this.state.mode);
+        }, 5000);
+      }
+    });
     clearInterval(this.timer);
     this.timer = setInterval(() => {
       if (this.audio.duration) {
@@ -90,7 +98,7 @@ class Criteria extends React.Component {
   render() {
     return <div className={sty.player}>
       <div className='music-title'>
-        <img src={require('../assets/avatar.png')} className='avatar' alt='' />
+        <img src={require('../assets/avatar.jpg')} className={`avatar ${this.state.isPlay && 'spin' }`} alt='' />
         <div className='box'>
           <div className='title'>
             { this.state.downloading ? <Icon type="loading" /> : null }{this.props.music.song.title || '-'}

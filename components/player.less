@@ -5,6 +5,7 @@
   align-items: center;
   padding: 0px 20px;
   position: relative;
+  background-color: #fff;
 
   :global{
     .music-title{
@@ -39,6 +40,11 @@
         width: 38px;
         border-radius: 50%;
         margin-right: 10px;
+
+        &.spin{
+          display: inline-block;
+          animation: loadingCircle 3s infinite linear;
+        }
       }
     }
 

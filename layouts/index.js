@@ -70,7 +70,7 @@ class Index extends React.Component {
         <Provider {...stores}>
           <div className={sty.container}>
             <div className='header'>
-              <div className='logo'>FA FOREVER</div>
+              <div className='logo'>FA FOREVER <span className='version'>V1.0.3</span></div>
               <SearchBar placeholder='搜索歌曲' onSubmit={stores.music.search}/>
               <div className='action'>
               <Tooltip placement="topLeft" title="当你发现歌库数据不完整时，可以点这里重新缓存歌曲数据">

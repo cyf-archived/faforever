@@ -25,6 +25,7 @@
     "flyio": "^0.6.0",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",
+    "react-virtualized": "^9.20.1",
     "umi": "^1.3.18",
     "umi-plugin-routes": "^0.1.5"
   },

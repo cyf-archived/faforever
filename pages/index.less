@@ -1,13 +1,29 @@
 .container{
   min-height: ~'calc(100vh - 50px - 70px)';
   max-height: ~'calc(100vh - 50px - 70px)';
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   :global{
 
     .header-box{
       font-weight: 600;
+    }
+
+    .ant-list{
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      .ant-spin-nested-loading{
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        .ant-spin-container{
+          flex-grow: 1;
+          overflow-y: scroll;
+        }
+      }
     }
 
     .ant-list-item{
@@ -26,6 +42,7 @@
 
     .playing{
       width: 30px;
+      text-align: center;
     }
 
     .title{
@@ -43,20 +60,9 @@
       width: 80px;
     }
 
-    .ant-spin-container{
-      min-height: 50vh;
-      user-select: none;
-      .ant-table-row{
-        cursor: pointer;
-      }
-    }
-
     .am-notice-bar{
-      z-index: 10;
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
+      min-height: 36px;
     }
   }
 }

@@ -24,7 +24,6 @@ function createWindow () {
   fly.request('http://magict.cn:5000/webapi/auth.cgi?api=SYNO.API.Auth&version=3&method=login&account=' + username +'&passwd='+ password +'&session=AudioStation&format=cookie').then((_) => {
     if (_.headers['set-cookie']) {
       cookie = _.headers['set-cookie'].split(';', 2)[0]
-      console.log(cookie);
     }
   })
 

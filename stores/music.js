@@ -51,10 +51,38 @@ class Store {
     yield this.loadCriteria()
   })
 
+  caculateCached = () => {
+    console.log('caculateCached...');
+    const cached = [];
+    const songs = Object.keys(this.songs).reduce((res, key) => {
+      res[key] = this.songs[key].map(i => {
+        const isCached = cache && cache.exist(i.id);
+        const data = {
+          ...i,
+          url: download(i.id),
+          playing: false,
+          cached: isCached,
+        }
+
+        if (isCached && key !== '__cached__') {
+          cached.push(data)
+        }
+
+        return data
+      })
+      return res;
+    }, {});
+
+    this.songs = {
+      ...songs,
+      __cached__: cached,
+    }
+  }
+
   loadCriteria = flow(function *() {
     this.note = (yield note()).data;
     if (this.criteria.length === 0 || Object.keys(this.songs).length === 0) {
-      const hide = message.loading('首次缓存，需要一段时间，请耐心等待', 0)
+      const hide = message.loading('加载缓存，需要一段时间，请耐心等待', 0)
       try {
         const { data } = yield getEntry();
         const jsonData = JSON.parse(data);
@@ -70,6 +98,7 @@ class Store {
             }
           }
           localStorage['songs'] = JSON.stringify(this.songs);
+          this.caculateCached();
           this.loading = false;
         }
         hide();
@@ -78,6 +107,7 @@ class Store {
         message.error(error.message);
       }
     } else {
+      this.caculateCached();
       this.loading = false;
     }
   })
@@ -87,25 +117,19 @@ class Store {
     this.listloading = true;
     this.current_criteria = criteria;
     if (this.songs[criteria]) {
-      runInAction(() => {
-        const data = [];
-        for (let index = 0; index < this.songs[criteria].length; index++) {
-          const element = this.songs[criteria][index];
-          data.push({
-            ...element,
-            url: download(element.id),
-            playing: element.id === this.song.id,
-            cached: cache && cache.exist(element.id),
-          })
-        }
-        this.current_songs = data
-        this.listloading = false;
-      })
+      const data = [];
+      for (let index = 0; index < this.songs[criteria].length; index++) {
+        const element = this.songs[criteria][index];
+        data.push({
+          ...element,
+          playing: element.id === this.song.id,
+        })
+      }
+      this.current_songs = data
+      this.listloading = false;
     } else {
       this.listloading = false;
     }
-
-
   }
 
   @action play = (song, dclick = true) => {
@@ -126,8 +150,37 @@ class Store {
     } else {
       this.url = download(song.id);
       if (cache) {
-        message.info('开始缓存：' + cache.path(song.id))
         ipcRenderer && ipcRenderer.send('cache', this.url, song.id);
+        let t = 0;
+        const timer = setInterval(() => {
+          const isCached = cache && cache.exist(song.id);
+          t++;
+
+          if (isCached) {
+            runInAction(() => {
+              const index = this.songs[this.song.additional.song_tag.album].findIndex(i => i.id === song.id)
+              this.songs[this.song.additional.song_tag.album][index] = {
+                ...this.songs[this.song.additional.song_tag.album][index],
+                cached: true
+              };
+
+              this.current_songs = this.current_songs.map(i => {
+                return {
+                  ...i,
+                  cached: i.id === song.id ? true : i.cached,
+                }
+              })
+
+              this.songs.__cached__.push(this.song)
+            })
+          }
+
+          if (isCached || t > 15) {
+            clearInterval(timer);
+            console.log('clearInterval');
+          }
+
+        }, 1500);
       }
     }
   }
@@ -208,9 +261,7 @@ class Store {
 
     const filterSongs = allSongs.filter(song => song.title.indexOf(key) !== -1).map((song) =>({
       ...song,
-      url: download(song.id),
       playing: song.id === this.song.id,
-      cached: cache && cache.exist(song.id),
     }));
 
     this.current_songs = filterSongs
