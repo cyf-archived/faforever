@@ -85,7 +85,7 @@ class Index extends React.Component {
           <div className={sty.container}>
             <div className="header">
               <div className="logo">
-                FA FOREVER <span className="version">V1.1.0</span>
+                FA FOREVER <span className="version">V1.1.1</span>
               </div>
               <SearchBar
                 placeholder="搜索歌曲"
@@ -102,7 +102,7 @@ class Index extends React.Component {
                     }
                   }}
                 >
-                  &#xe614;
+                  &#xe611;
                 </i>
                 <Tooltip
                   placement="topLeft"

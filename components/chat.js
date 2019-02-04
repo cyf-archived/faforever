@@ -5,6 +5,9 @@ import io from "socket.io-client";
 import "react-chat-widget/lib/styles.css";
 import "./chat.less";
 
+const host = "148.70.4.54:37373";
+// const host = "127.0.0.1:7001";
+
 class Message extends React.Component {
   render() {
     return (
@@ -29,7 +32,8 @@ class Chat extends React.Component {
   socket = null;
 
   handleNewUserMessage = text => {
-    if (!this.socket) {
+    if (this.socket) {
+      console.log(text);
       this.socket.emit("chat", {
         text
       });
@@ -44,7 +48,7 @@ class Chat extends React.Component {
 
   connect = () => {
     if (!this.socket) {
-      this.socket = io("localhost:7001", {
+      this.socket = io(host, {
         transports: ["websocket"],
         query: {
           room: "fa-forever",
@@ -56,6 +60,7 @@ class Chat extends React.Component {
       this.socket.on("join", this.onJoin);
       this.socket.on("leave", this.onLeave);
       this.socket.on("message", this.onMessage);
+      this.socket.on("system", this.onSystem);
       this.socket.on("disconnect", this.onDisConnect);
     }
   };
@@ -75,6 +80,12 @@ class Chat extends React.Component {
   onLeave = data => {
     renderCustomComponent(System, {
       text: `${data.name}离开.`
+    });
+  };
+
+  onSystem = data => {
+    renderCustomComponent(System, {
+      text: data.text
     });
   };
 
