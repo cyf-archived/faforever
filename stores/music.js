@@ -76,7 +76,8 @@ class Store {
     const cached = [];
     const songs = Object.keys(this.songs).reduce((res, key) => {
       res[key] = this.songs[key].map(i => {
-        const isCached = cache && cache.exist(i.id);
+        const cacheKey = i.path.replace(/\/|.mp3/g, "_");
+        const isCached = cache && cache.exist(cacheKey);
         const data = {
           ...i,
           url: download(i.id),
@@ -168,15 +169,18 @@ class Store {
       };
     });
 
-    if (cache && cache.exist(song.id)) {
-      this.url = cache && cache.path(song.id);
+    const cacheKey = song.path.replace(/\/|.mp3/g, "_");
+    // console.log(cacheKey);
+
+    if (cache && cache.exist(cacheKey)) {
+      this.url = cache && cache.path(cacheKey);
     } else {
       this.url = download(song.id, this.loginsid);
       if (cache) {
-        ipcRenderer && ipcRenderer.send("cache", this.url, song.id);
+        ipcRenderer && ipcRenderer.send("cache", this.url, cacheKey);
         let t = 0;
         const timer = setInterval(() => {
-          const isCached = cache && cache.exist(song.id);
+          const isCached = cache && cache.exist(cacheKey);
           t++;
 
           if (isCached) {
