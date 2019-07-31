@@ -173,7 +173,7 @@ class Store {
     // console.log(cacheKey);
 
     if (cache && cache.exist(cacheKey)) {
-      this.url = cache && cache.path(cacheKey);
+      this.url = 'file://' + cache.path(cacheKey);
     } else {
       this.url = download(song.id, this.loginsid);
       if (cache) {
