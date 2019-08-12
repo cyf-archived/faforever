@@ -7,8 +7,8 @@
     "build": "umi build",
     "lint": "eslint --ext .js src test",
     "precommit": "npm run lint",
-    "dev": "set FA_NODE_ENV=dev&&electron .",
-    "preview": "set FA_NODE_ENV=prd&&electron ."
+    "dev": "cross-env FA_NODE_ENV=dev electron .",
+    "preview": "cross-env FA_NODE_ENV=prd electron ."
   },
   "main": "./src/main.js",
   "devDependencies": {
