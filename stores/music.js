@@ -123,12 +123,12 @@ class Store {
           }
           localStorage["songs"] = JSON.stringify(this.songs);
           this.caculateCached();
-          this.loading = false;
         }
-        hide();
       } catch (error) {
-        hide();
         message.error(error.message);
+      } finally {
+        hide();
+        this.loading = false;
       }
     } else {
       this.caculateCached();
@@ -173,7 +173,7 @@ class Store {
     // console.log(cacheKey);
 
     if (cache && cache.exist(cacheKey)) {
-      this.url = 'file://' + cache.path(cacheKey);
+      this.url = "file://" + cache.path(cacheKey);
     } else {
       this.url = download(song.id, this.loginsid);
       if (cache) {

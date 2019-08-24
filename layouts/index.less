@@ -1,12 +1,12 @@
-@import '../v';
+@import "../v";
 
-.container{
+.container {
   height: 100vh;
-  :global{
-    .header{
+  :global {
+    .header {
       height: 50px;
       background-color: @primary;
-      color: #FFFFFF;
+      color: #ffffff;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -14,58 +14,62 @@
       overflow: hidden;
       -webkit-app-region: drag;
 
-      .logo{
+      .logo {
         font-size: 30px;
         font-family: font-poem-2527;
         height: 50px;
         line-height: 50px;
         flex-grow: 1;
-        .version{
+        .version {
           font-size: 12px;
           color: #f77171;
-          font-family: "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+          font-family: "Chinese Quote", -apple-system, BlinkMacSystemFont,
+            "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+            "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji",
+            "Segoe UI Emoji", "Segoe UI Symbol";
         }
       }
-      .action{
+      .action {
         -webkit-app-region: no-drag;
 
-        .anticon,.fa-icon{
+        .anticon,
+        .fa-icon {
           cursor: pointer;
           margin-left: 8px;
         }
       }
 
-      .am-search{
+      .am-search {
         margin-right: 50px;
         -webkit-app-region: no-drag;
         background-color: transparent;
-        .am-search-cancel{
-          color: #FFFFFF;
+        .am-search-cancel {
+          color: #ffffff;
           cursor: pointer;
         }
-        *{
+        * {
           -webkit-app-region: no-drag;
         }
         min-width: 350px;
       }
     }
 
-    .main{
+    .main {
       display: flex;
       justify-content: space-between;
-      height: ~'calc(100vh - 50px - 70px)';
-      .criteria{
+      height: ~"calc(100vh - 50px - 70px)";
+      .criteria {
         width: 220px;
         background-color: #f5f5f7;
-        min-height: 100%;
+        height: ~"calc(100vh - 100px - 70px)";
         display: flex;
         justify-content: center;
 
-        ul{
+        ul {
           padding: 15px 0px;
           list-style: none;
           width: 220px;
-          li{
+          li {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -74,26 +78,24 @@
             color: #111111;
             cursor: pointer;
             border-left: 3px solid transparent;
-            span{
+            span {
               margin-right: auto;
             }
-            &.active{
+            &.active {
               background-color: rgb(230, 231, 234);
               color: #000000;
               border-left: 3px solid @primary;
             }
-            .anticon{
+            .anticon {
               margin-right: 5px;
             }
           }
         }
-
       }
-      .content{
+      .content {
         flex-grow: 1;
         position: relative;
       }
     }
   }
-
 }
