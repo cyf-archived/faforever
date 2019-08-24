@@ -2,6 +2,7 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 import { List, Icon } from "antd";
 import { NoticeBar } from "antd-mobile";
+import Chat from "../components/chat";
 import "moment/locale/zh-cn";
 
 import * as sty from "./index.less";
@@ -10,7 +11,12 @@ import * as sty from "./index.less";
 @observer
 class Index extends React.Component {
   componentDidMount() {
-    this.props.music.login();
+    this.load();
+  }
+
+  load = async () =>{
+    await this.props.music.login();
+    this.chat && this.chat.connect();
   }
 
   render() {
@@ -76,6 +82,10 @@ class Index extends React.Component {
               </div>
             </List.Item>
           )}
+        />
+
+        <Chat
+          ref={chat => (this.chat = chat)}
         />
       </div>
     );

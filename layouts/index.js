@@ -7,8 +7,6 @@ import { SearchBar } from "antd-mobile";
 
 import Criteria from "../components/criteria";
 import Player from "../components/player";
-import Chat from "../components/chat";
-import Name from "../components/name";
 
 import "moment/locale/zh-cn";
 
@@ -24,9 +22,7 @@ if (window.require) {
 configure({ enforceActions: true });
 
 class Index extends React.Component {
-  state = {
-    name_visible: false
-  };
+
   componentDidMount() {
     if (localStorage["version"] !== "4") {
       localStorage["version"] = "4";
@@ -61,22 +57,12 @@ class Index extends React.Component {
     stores.music.reload();
   };
 
-  openName = () => {
-    this.setState({
-      name_visible: true
-    });
-  };
 
-  closeName = () => {
-    this.setState({
-      name_visible: false
-    });
-  };
 
-  startChat = () => {
-    this.chat.connect();
-    this.openChat();
-  };
+  // startChat = () => {
+  //   this.chat.connect();
+  //   this.openChat();
+  // };
 
   render() {
     return (
@@ -92,18 +78,29 @@ class Index extends React.Component {
                 onSubmit={stores.music.search}
               />
               <div className="action">
-                <i
+                {/* <i
                   className="fa-icon"
                   onClick={() => {
-                    if (localStorage.name) {
-                      this.startChat();
-                    } else {
-                      this.openName();
-                    }
+                    // if (localStorage.name) {
+                    //   this.startChat();
+                    // } else {
+                    //   this.openName();
+                    // }
+
+                    notification.open({
+                      message: '-',
+                      description: '11111111111',
+                      className: 'chat-msg',
+                      duration: 100000,
+                      top: 48,
+                      style: {
+                        width: 'auto'
+                      }
+                    });
                   }}
                 >
                   &#xe611;
-                </i>
+                </i> */}
                 <Tooltip
                   placement="topLeft"
                   title="当你发现歌库数据不完整时，可以点这里重新缓存歌曲数据"
@@ -126,20 +123,8 @@ class Index extends React.Component {
             </div>
 
             <Player />
-            <Chat
-              ref={chat => (this.chat = chat)}
-              setOpen={handleToggle => {
-                this.openChat = handleToggle;
-              }}
-            />
 
-            <Name
-              visible={this.state.name_visible}
-              close={this.closeName}
-              enter={() => {
-                this.startChat();
-              }}
-            />
+
           </div>
         </Provider>
       </LocaleProvider>

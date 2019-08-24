@@ -1,35 +1,24 @@
 import React from "react";
-import { Widget, renderCustomComponent } from "react-chat-widget";
 import io from "socket.io-client";
+import { message, notification, Input } from "antd";
+import Name from "./name";
 
-import "react-chat-widget/lib/styles.css";
 import "./chat.less";
+import { Button } from "antd-mobile";
 
 const host = "148.70.4.54:37373";
 // const host = "127.0.0.1:7001";
 
-class Message extends React.Component {
-  render() {
-    return (
-      <div className="rcw-messages">
-        <div className="rcw-message-name">{this.props.name}</div>
-        <div className="rcw-response">
-          <div className="rcw-message-text">
-            <p>{this.props.text}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-class System extends React.Component {
-  render() {
-    return <div className="rcw-system-messages">{this.props.text}</div>;
-  }
-}
 
 class Chat extends React.Component {
   socket = null;
+  time = -1;
+
+  state = {
+    name_visible: false,
+    text: '',
+  };
+
 
   handleNewUserMessage = text => {
     if (this.socket) {
@@ -40,11 +29,21 @@ class Chat extends React.Component {
     }
   };
 
-  componentDidMount() {
-    renderCustomComponent(System, {
-      text: "连接中..."
+  componentDidMount() {}
+
+  openNotification = text => {
+    notification.open({
+      message: '-',
+      description: text,
+      className: 'chat-msg',
+      duration: 2,
+      style: {
+        width: 'auto'
+      }
     });
-  }
+  };
+
+
 
   connect = () => {
     if (!this.socket) {
@@ -66,48 +65,90 @@ class Chat extends React.Component {
   };
 
   onConnect = () => {
-    renderCustomComponent(System, {
-      text: "已连接"
-    });
+    message.success('与聊天服务器连接成功.');
   };
 
   onJoin = data => {
-    renderCustomComponent(System, {
-      text: `${data.name}加入.`
-    });
+    // this.openNotification(`${data.name}加入.`);
   };
 
   onLeave = data => {
-    renderCustomComponent(System, {
-      text: `${data.name}离开.`
-    });
+    // this.openNotification(`${data.name}离开.`);
   };
 
   onSystem = data => {
-    renderCustomComponent(System, {
-      text: data.text
-    });
+    this.openNotification(data.text);
   };
 
   onMessage = data => {
-    if (data.id !== this.socket.id) {
-      renderCustomComponent(Message, data);
-    }
+    // console.log(data, `${data.name}: ${data.text}`);
+    this.openNotification(`${data.name}: ${data.text}`);
   };
 
   onDisConnect = () => {
-    renderCustomComponent(System, {
-      text: "已断开"
+    message.error('与聊天服务器断开.');
+  };
+
+
+  openName = () => {
+    this.setState({
+      name_visible: true
     });
   };
 
+  closeName = () => {
+    this.setState({
+      name_visible: false
+    });
+  };
+
+  componentWillUnmount() {
+    if (this.socket) {
+      this.socket.close();
+    }
+  }
+
+  send = (text) => {
+    if (localStorage.name) {
+      if (this.socket && this.state.value) {
+        console.log('send...', this.state.value);
+        const now = (new Date()).valueOf();
+        if (this.time > 0 && now - this.time < 3000) {
+          return message.info('请勿灌水');
+        }
+        this.time = (new Date()).valueOf();
+        this.socket.emit("chat", {
+          text: this.state.value
+        });
+        this.setState({
+          value: ''
+        })
+      }
+    } else {
+      this.openName();
+    }
+
+  }
+
+  onValueChange = e => {
+    this.setState({
+      value: e.target.value
+    })
+  }
+
   render() {
     return (
-      <Widget
-        senderPlaceHolder="说点什么吧..."
-        handleNewUserMessage={this.handleNewUserMessage}
-        launcher={handleToggle => this.props.setOpen(handleToggle)}
-      />
+      <div className="chat-input">
+        <Name
+          visible={this.state.name_visible}
+          close={this.closeName}
+          enter={() => {
+            this.closeName();
+          }}
+        />
+        <Input value={this.state.value} onChange={this.onValueChange.bind(this)} onPressEnter={this.send} placeholder="(*^__^*) 这是一个假的弹幕..." />
+        <Button size="small" type="primary" onClick={this.send}>发送弹幕</Button>
+      </div>
     );
   }
 }
