@@ -17,7 +17,7 @@ export default {
       {
         antd: true,
         dva: false,
-        dynamicImport: { webpackChunkName: true },
+        dynamicImport: false,
         title: 'web',
         dll: true,
         locale: {

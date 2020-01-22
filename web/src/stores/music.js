@@ -1,5 +1,5 @@
 import { observable, flow, action, runInAction } from 'mobx';
-import { getEntry, getSongs, download, note, login, info } from '../apis';
+import { getEntry, getSongs, download, note, login } from '../apis';
 import { message } from 'antd';
 
 let remote;

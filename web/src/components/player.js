@@ -105,6 +105,14 @@ class Criteria extends React.Component {
   render() {
     return (
       <div className="player">
+        <audio
+          ref="audio"
+          autoPlay
+          controls
+          loop={this.state.mode === 2}
+          src={this.props.music.url}
+        ></audio>
+
         <div className="controller-bar ">
           <Slider
             onChange={this.handleChangePercent}
@@ -115,14 +123,6 @@ class Criteria extends React.Component {
             tooltipVisible={false}
           />
         </div>
-
-        <audio
-          ref="audio"
-          autoPlay
-          controls
-          loop={this.state.mode === 2}
-          src={this.props.music.url}
-        ></audio>
 
         {this.props.music.song.additional ? (
           <div className="music-info">

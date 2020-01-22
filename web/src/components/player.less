@@ -1,4 +1,11 @@
 :global {
+  audio {
+    position: absolute;
+    height: 0px;
+    width: 0px;
+    opacity: 0;
+    overflow: hidden;
+  }
   .player {
     height: 70px;
     display: flex;
@@ -56,13 +63,6 @@
         font-size: 12px;
         color: rgba(0, 0, 0, 0.4);
       }
-    }
-
-    audio {
-      position: absolute;
-      height: 0;
-      width: 0;
-      overflow: hidden;
     }
 
     .ant-btn {
