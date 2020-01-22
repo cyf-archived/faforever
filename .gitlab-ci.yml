@@ -2,14 +2,14 @@ stages:
   - build
   - deploy
 
-build-dev:
+build:
   image: rojerchen95/umijs-builder
   stage: build
   before_script:
     - cd web
     - npm install
   script:
-    - npm run build-dev
+    - npm run build
   only:
     - master
   artifacts:
@@ -17,11 +17,11 @@ build-dev:
     paths:
       - web/dist
 
-deploy-dev:
+deploy:
   image: rojerchen95/node-qiniu-builder
   stage: deploy
   dependencies:
-    - build-dev
+    - build
   script:
     - qshell account "$CI_AK" "$CI_SK" deploy
     - qshell qupload2 --src-dir=web/dist --bucket="$CI_BUCKET" --key-prefix="$CI_PREFIX" --overwrite --check-exists --check-hash
