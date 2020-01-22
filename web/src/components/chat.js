@@ -1,14 +1,13 @@
-import React from "react";
-import io from "socket.io-client";
-import { message, notification, Input } from "antd";
-import Name from "./name";
+import React from 'react';
+import io from 'socket.io-client';
+import { message, notification, Input } from 'antd';
+import Name from './name';
 
-import "./chat.less";
-import { Button } from "antd-mobile";
+import './chat.less';
+import { Button } from 'antd-mobile';
 
-const host = "148.70.4.54:37373";
+const host = '148.70.4.54:37373';
 // const host = "127.0.0.1:7001";
-
 
 class Chat extends React.Component {
   socket = null;
@@ -19,12 +18,11 @@ class Chat extends React.Component {
     text: '',
   };
 
-
   handleNewUserMessage = text => {
     if (this.socket) {
       console.log(text);
-      this.socket.emit("chat", {
-        text
+      this.socket.emit('chat', {
+        text,
       });
     }
   };
@@ -38,29 +36,27 @@ class Chat extends React.Component {
       className: 'chat-msg',
       duration: 2,
       style: {
-        width: 'auto'
-      }
+        width: 'auto',
+      },
     });
   };
-
-
 
   connect = () => {
     if (!this.socket) {
       this.socket = io(host, {
-        transports: ["websocket"],
+        transports: ['websocket'],
         query: {
-          room: "fa-forever",
-          name: localStorage.name
-        }
+          room: 'fa-forever',
+          name: localStorage.name,
+        },
       });
 
-      this.socket.on("connect", this.onConnect);
-      this.socket.on("join", this.onJoin);
-      this.socket.on("leave", this.onLeave);
-      this.socket.on("message", this.onMessage);
-      this.socket.on("system", this.onSystem);
-      this.socket.on("disconnect", this.onDisConnect);
+      this.socket.on('connect', this.onConnect);
+      this.socket.on('join', this.onJoin);
+      this.socket.on('leave', this.onLeave);
+      this.socket.on('message', this.onMessage);
+      this.socket.on('system', this.onSystem);
+      this.socket.on('disconnect', this.onDisConnect);
     }
   };
 
@@ -89,16 +85,15 @@ class Chat extends React.Component {
     message.error('与聊天服务器断开.');
   };
 
-
   openName = () => {
     this.setState({
-      name_visible: true
+      name_visible: true,
     });
   };
 
   closeName = () => {
     this.setState({
-      name_visible: false
+      name_visible: false,
     });
   };
 
@@ -108,33 +103,32 @@ class Chat extends React.Component {
     }
   }
 
-  send = (text) => {
+  send = text => {
     if (localStorage.name) {
       if (this.socket && this.state.value) {
         console.log('send...', this.state.value);
-        const now = (new Date()).valueOf();
+        const now = new Date().valueOf();
         if (this.time > 0 && now - this.time < 3000) {
           return message.info('请勿灌水');
         }
-        this.time = (new Date()).valueOf();
-        this.socket.emit("chat", {
-          text: this.state.value
+        this.time = new Date().valueOf();
+        this.socket.emit('chat', {
+          text: this.state.value,
         });
         this.setState({
-          value: ''
-        })
+          value: '',
+        });
       }
     } else {
       this.openName();
     }
-
-  }
+  };
 
   onValueChange = e => {
     this.setState({
-      value: e.target.value
-    })
-  }
+      value: e.target.value,
+    });
+  };
 
   render() {
     return (
@@ -146,8 +140,15 @@ class Chat extends React.Component {
             this.closeName();
           }}
         />
-        <Input value={this.state.value} onChange={this.onValueChange.bind(this)} onPressEnter={this.send} placeholder="(*^__^*) 这是一个假的弹幕..." />
-        <Button size="small" type="primary" onClick={this.send}>发送弹幕</Button>
+        <Input
+          value={this.state.value}
+          onChange={this.onValueChange.bind(this)}
+          onPressEnter={this.send}
+          placeholder="(*^__^*) 这是一个假的弹幕..."
+        />
+        <Button size="small" type="primary" onClick={this.send}>
+          发送弹幕
+        </Button>
       </div>
     );
   }

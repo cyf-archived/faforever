@@ -3,10 +3,6 @@
   "description": "chenyifaer",
   "version": "1.0.3",
   "scripts": {
-    "start": "umi dev",
-    "build": "umi build",
-    "lint": "eslint --ext .js src test",
-    "precommit": "npm run lint",
     "dev": "cross-env FA_NODE_ENV=dev electron .",
     "preview": "cross-env FA_NODE_ENV=prd electron ."
   },
@@ -20,16 +16,8 @@
   "author": "rojer",
   "license": "MIT",
   "dependencies": {
-    "@babel/polyfill": "^7.0.0-beta.56",
     "electron-store": "^2.0.0",
-    "flyio": "^0.6.0",
-    "mobx": "^5.0.3",
-    "mobx-react": "^5.2.3",
-    "react-chat-widget": "^2.1.4-1",
-    "react-virtualized": "^9.20.1",
-    "socket.io-client": "^2.2.0",
-    "umi": "^1.3.18",
-    "umi-plugin-routes": "^0.1.5"
+    "flyio": "^0.6.0"
   },
   "build": {
     "nsis": {

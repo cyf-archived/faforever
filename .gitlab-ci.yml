@@ -1,0 +1,31 @@
+stages:
+  - build
+  - deploy
+
+build-dev:
+  image: rojerchen95/umijs-builder
+  stage: build
+  before_script:
+    - cd web
+    - npm install
+  script:
+    - npm run build-dev
+  only:
+    - master
+  artifacts:
+    expire_in: 30 min
+    paths:
+      - web/dist
+
+deploy-dev:
+  image: rojerchen95/node-qiniu-builder
+  stage: deploy
+  dependencies:
+    - build-dev
+  script:
+    - qshell account "$CI_AK" "$CI_SK" deploy
+    - qshell qupload2 --src-dir=web/dist --bucket="$CI_BUCKET" --key-prefix="$CI_PREFIX" --overwrite --check-exists --check-hash
+    - echo "http://cdn.eqistu.cn/faforever/" > cdn.txt
+    - qshell cdnrefresh --dirs cdn.txt
+  only:
+    - master

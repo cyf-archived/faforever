@@ -9,26 +9,24 @@ body {
 }
 
 @font-face {
-  font-family: "font-poem-2527";
-  src: url("./assets/2527.ttf") format("TrueType"),
-    url("./assets/2527.woff") format("woff");
+  font-family: 'font-poem-2527';
+  src: url('./assets/2527.ttf') format('TrueType'), url('./assets/2527.woff') format('woff');
   font-display: swap;
 }
 
 @font-face {
-  font-family: "faicon"; /* project id 785826 */
-  src: url("//at.alicdn.com/t/font_785826_krv5t2o0d3.eot");
-  src: url("//at.alicdn.com/t/font_785826_krv5t2o0d3.eot?#iefix")
-      format("embedded-opentype"),
-    url("//at.alicdn.com/t/font_785826_krv5t2o0d3.woff2") format("woff2"),
-    url("//at.alicdn.com/t/font_785826_krv5t2o0d3.woff") format("woff"),
-    url("//at.alicdn.com/t/font_785826_krv5t2o0d3.ttf") format("truetype"),
-    url("//at.alicdn.com/t/font_785826_krv5t2o0d3.svg#iconfont") format("svg");
+  font-family: 'faicon'; /* project id 785826 */
+  src: url('//at.alicdn.com/t/font_785826_krv5t2o0d3.eot');
+  src: url('//at.alicdn.com/t/font_785826_krv5t2o0d3.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_785826_krv5t2o0d3.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_785826_krv5t2o0d3.woff') format('woff'),
+    url('//at.alicdn.com/t/font_785826_krv5t2o0d3.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_785826_krv5t2o0d3.svg#iconfont') format('svg');
 }
 
 :global {
   .fa-icon {
-    font-family: "faicon" !important;
+    font-family: 'faicon' !important;
     font-size: 16px;
     font-style: normal;
     -webkit-font-smoothing: antialiased;
@@ -43,7 +41,7 @@ body {
 
 ::-webkit-scrollbar {
   /*滚动条整体样式*/
-  width: 7px; /*高宽分别对应横竖滚动条的尺寸*/
+  width: 3px; /*高宽分别对应横竖滚动条的尺寸*/
   height: 1px;
   position: relative;
   z-index: 20;
@@ -65,15 +63,15 @@ body {
   z-index: 20;
 }
 
-.ant-notification{
+.ant-notification {
   width: auto !important;
 }
 
-.chat-msg{
+.chat-msg {
   padding: 5px 10px;
 
-  .ant-notification-notice-message, .ant-notification-notice-close{
+  .ant-notification-notice-message,
+  .ant-notification-notice-close {
     display: none;
   }
-
 }

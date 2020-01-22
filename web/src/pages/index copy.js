@@ -1,23 +1,23 @@
-import React from "react";
-import { inject, observer } from "mobx-react";
-import { List, Icon } from "antd";
-import { NoticeBar } from "antd-mobile";
-import Chat from "../components/chat";
-import "moment/locale/zh-cn";
+import React from 'react';
+import { inject, observer } from 'mobx-react';
+import { List, Icon } from 'antd';
+import { NoticeBar } from 'antd-mobile';
+// import Chat from "../components/chat";
+import 'moment/locale/zh-cn';
 
-import * as sty from "./index.less";
+import * as sty from './index.less';
 
-@inject("music")
+@inject('music')
 @observer
 class Index extends React.Component {
   componentDidMount() {
     this.load();
   }
 
-  load = async () =>{
+  load = async () => {
     await this.props.music.login();
     this.chat && this.chat.connect();
-  }
+  };
 
   render() {
     return (
@@ -28,7 +28,7 @@ class Index extends React.Component {
               loop: true,
               leading: 2000,
               trailing: 2000,
-              style: { padding: "0 7.5px" }
+              style: { padding: '0 7.5px' },
             }}
           >
             {this.props.music.note}
@@ -50,14 +50,14 @@ class Index extends React.Component {
           }
           renderItem={item => (
             <List.Item
-              key={`${item.id}-${item.cached ? "1" : "2"}`}
+              key={`${item.id}-${item.cached ? '1' : '2'}`}
               onDoubleClick={() => {
                 this.props.music.play(item);
               }}
             >
               <div className="playing">
                 {item.playing && (
-                  <i className="fa-icon spin" style={{ color: "#c62f2f" }}>
+                  <i className="fa-icon spin" style={{ color: '#e04f4c' }}>
                     &#xe61f;
                   </i>
                 )}
@@ -66,17 +66,15 @@ class Index extends React.Component {
               <div className="album">{item.additional.song_tag.album}</div>
               <div className="artist">{item.additional.song_tag.artist}</div>
               <div className="duration">
-                {`${Math.floor(
-                  Number(item.additional.song_audio.duration) / 60
-                )}:${
+                {`${Math.floor(Number(item.additional.song_audio.duration) / 60)}:${
                   item.additional.song_audio.duration % 60 < 10
-                    ? "0" + (item.additional.song_audio.duration % 60)
+                    ? '0' + (item.additional.song_audio.duration % 60)
                     : item.additional.song_audio.duration % 60
                 }`}
                 {item.cached && (
                   <Icon
                     type="cloud-download"
-                    style={{ marginLeft: 4, color: "#c62f2f", fontSize: 12 }}
+                    style={{ marginLeft: 4, color: '#e04f4c', fontSize: 12 }}
                   />
                 )}
               </div>
@@ -84,9 +82,7 @@ class Index extends React.Component {
           )}
         />
 
-        <Chat
-          ref={chat => (this.chat = chat)}
-        />
+        {/* <Chat ref={chat => (this.chat = chat)} /> */}
       </div>
     );
   }
