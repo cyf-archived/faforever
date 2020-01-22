@@ -8,6 +8,7 @@ export default {
       routes: [{ path: '/', component: '../pages/index' }],
     },
   ],
+  history: 'hash',
   publicPath: 'http://cdn.eqistu.cn/faforever/',
   theme: './theme-config.js',
   plugins: [
