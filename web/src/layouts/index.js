@@ -26,6 +26,10 @@ configure({
 
 class Index extends React.Component {
   componentDidMount() {
+    const cachePath = localStorage.getItem('cache-path');
+    if (cachePath) {
+      ipcRenderer && ipcRenderer.send('cache-path', cachePath);
+    }
     stores.music.loadNote();
     stores.music.login();
   }
