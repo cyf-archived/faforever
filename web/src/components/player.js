@@ -40,7 +40,7 @@ class Criteria extends React.Component {
     this.audio.addEventListener('error', () => {
       this.setState({ downloading: false });
       if (this.props.music.url) {
-        message.error(`播放失败，请检查网络/留意公告。`);
+        message.error(`播放失败，请检查网络/刷新缓存/留意公告。`);
         setTimeout(() => {
           this.props.music.playNext(this.state.mode);
         }, 5000);
