@@ -1,3 +1,11 @@
+/*
+ * @Author: RojerChen
+ * @Date: 2020-09-10 12:30:28
+ * @LastEditors: RojerChen
+ * @LastEditTime: 2020-09-10 13:42:45
+ * @FilePath: /fa-forever/web/src/pages/index.js
+ * @Company: freesailing.cn
+ */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { List, Icon } from 'antd';

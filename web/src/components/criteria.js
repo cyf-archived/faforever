@@ -1,3 +1,11 @@
+/*
+ * @Author: RojerChen
+ * @Date: 2020-09-10 12:30:28
+ * @LastEditors: RojerChen
+ * @LastEditTime: 2020-09-10 13:22:46
+ * @FilePath: /fa-forever/web/src/components/criteria.js
+ * @Company: freesailing.cn
+ */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Spin, Icon, Tag, Divider } from 'antd';
@@ -6,8 +14,15 @@ import { Spin, Icon, Tag, Divider } from 'antd';
 @observer
 class Criteria extends React.Component {
   componentDidMount() {
-    this.props.music.loadCriteria();
+    this.load();
   }
+
+  load = async () => {
+    if (!localStorage['songs']) {
+      await this.props.music.loadCriteria();
+    }
+    await this.props.music.caculateCached();
+  };
 
   render() {
     return (
@@ -42,11 +57,7 @@ class Criteria extends React.Component {
             >
               <Icon type="cloud-download" />
               <span>已缓存</span>
-              <Tag>
-                {this.props.music.songs['__cached__']
-                  ? this.props.music.songs['__cached__'].length
-                  : 0}
-              </Tag>
+              <Tag>{this.props.music.cacheds.length}</Tag>
             </li>
           </ul>
         </Spin>

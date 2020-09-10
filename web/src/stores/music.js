@@ -20,6 +20,7 @@ class Store {
   @observable criteria;
   @observable current_criteria;
   @observable songs;
+  @observable cacheds;
   @observable current_songs;
   @observable song;
   @observable loading;
@@ -33,6 +34,7 @@ class Store {
     this.criteria = localStorage['criteria'] ? JSON.parse(localStorage['criteria']) : [];
     this.current_criteria = {};
     this.songs = localStorage['songs'] ? JSON.parse(localStorage['songs']) : {};
+    this.cacheds = [];
     this.currentList = [];
     this.current_songs = [];
     this.song = {};
@@ -44,19 +46,19 @@ class Store {
   }
 
   login = flow(function*() {
-    const hide = message.loading('登陆中...');
+    message.loading('登陆中...');
     this.loading = true;
     const { data } = yield login();
     if (data.success === true) {
       this.loginsid = data.data.sid;
-      hide();
+      message.destroy();
     } else {
       message.error('登录失败 -1');
     }
+    this.loading = false;
   });
 
   reload = flow(function*() {
-    this.loading = true;
     localStorage.removeItem('criteria');
     localStorage.removeItem('songs');
     this.criteria = [];
@@ -64,65 +66,84 @@ class Store {
     yield this.loadCriteria();
   });
 
-  caculateCached = () => {
-    console.log('caculateCached...');
-    const cached = [];
-    const songs = Object.keys(this.songs).reduce((res, key) => {
-      res[key] = this.songs[key].map(i => {
-        const cacheKey = i.path.replace(/\/|.mp3/g, '_');
-        const isCached = cache && cache.exist(cacheKey);
-        const data = {
-          ...i,
-          url: download(i.id),
-          playing: false,
-          cached: isCached,
-        };
+  caculateCached = flow(function*() {
+    message.loading('整理缓存碎片中...', 0);
+    setTimeout(() => {
+      console.log('caculateCached...');
+      try {
+        const cachepath = localStorage.getItem('cache-path');
+        const cached = [];
+        for (const key in this.songs) {
+          if (this.songs.hasOwnProperty(key)) {
+            this.songs[key].map(i => {
+              const cacheKey = i.path.replace(/\/|.mp3/g, '_');
+              const isCached = cache && cache.exist(cacheKey, cachepath);
+              const data = {
+                ...i,
+                url: download(i.id),
+                playing: false,
+                cached: isCached,
+              };
 
-        if (isCached && key !== '__cached__') {
-          cached.push(data);
+              if (isCached && key !== '__cached__') {
+                cached.push(data);
+              }
+
+              return data;
+            });
+          }
         }
 
-        return data;
-      });
-      return res;
-    }, {});
-
-    this.songs = {
-      ...songs,
-      __cached__: cached,
-    };
-  };
+        console.log('cached', cached);
+        runInAction(() => {
+          this.cacheds = cached;
+        });
+        console.log('cache finished');
+      } catch (e) {
+        console.log(e);
+      } finally {
+        runInAction(() => {
+          this.loading = false;
+        });
+        console.log('hide');
+        message.destroy();
+        if (this.current_criteria) {
+          this.toggle(this.current_criteria);
+        }
+      }
+    }, 1000);
+  });
 
   loadNote = flow(function*() {
-    this.note = (yield note()).data;
+    try {
+      this.note = (yield note()).data;
+    } catch (error) {
+      this.note = '';
+    }
   });
 
   loadCriteria = flow(function*() {
-    if (this.criteria.length === 0 || Object.keys(this.songs).length === 0) {
-      const hide = message.loading('加载缓存，需要一段时间，请耐心等待', 0);
-      try {
-        const { data } = yield getEntry();
-        if (data.data && data.data.albums.length > 0) {
-          this.criteria = data.data.albums;
-          localStorage['criteria'] = JSON.stringify(data.data.albums);
-          // this.toggle(data.data.albums[0].name);
-          for (const albums of data.data.albums) {
-            const { data: songs } = yield getSongs(albums.name, albums.album_artist);
-            if (songs.data && songs.data.songs.length > 0) {
-              this.songs[albums.name] = songs.data.songs;
-            }
+    this.loading = true;
+    message.loading('加载缓存，需要一段时间，请耐心等待', 0);
+    try {
+      const { data } = yield getEntry();
+      if (data.data && data.data.albums.length > 0) {
+        this.criteria = data.data.albums;
+        localStorage['criteria'] = JSON.stringify(data.data.albums);
+        // this.toggle(data.data.albums[0].name);
+        for (const albums of data.data.albums) {
+          const { data: songs } = yield getSongs(albums.name, albums.album_artist);
+          if (songs.data && songs.data.songs.length > 0) {
+            this.songs[albums.name] = songs.data.songs;
           }
-          localStorage['songs'] = JSON.stringify(this.songs);
-          this.caculateCached();
         }
-      } catch (error) {
-        message.error(error.message);
-      } finally {
-        hide();
-        this.loading = false;
+        localStorage['songs'] = JSON.stringify(this.songs);
+        yield this.caculateCached();
       }
-    } else {
-      yield this.caculateCached();
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      message.destroy();
       this.loading = false;
     }
   });
@@ -131,13 +152,15 @@ class Store {
     this.current_songs = [];
     this.listloading = true;
     this.current_criteria = criteria;
-    if (this.songs[criteria]) {
+    const list = criteria === '__cached__' ? this.cacheds : this.songs[criteria];
+    if (Array.isArray(list) && list.length > 0) {
       const data = [];
-      for (let index = 0; index < this.songs[criteria].length; index++) {
-        const element = this.songs[criteria][index];
+      for (let index = 0; index < list.length; index++) {
+        const element = list[index];
         data.push({
           ...element,
           playing: element.id === this.song.id,
+          cached: this.cacheds.findIndex(c => c.id === element.id) !== -1,
         });
       }
       this.current_songs = data;
@@ -162,36 +185,31 @@ class Store {
 
     const cacheKey = song.path.replace(/\/|.mp3/g, '_');
     // console.log(cacheKey);
+    const cachePath = localStorage.getItem('cache-path');
 
-    if (cache && cache.exist(cacheKey)) {
-      this.url = 'file://' + cache.path(cacheKey);
+    if (cache && cache.exist(cacheKey, cachePath)) {
+      this.url = 'file://' + cache.path(cacheKey, cachePath);
     } else {
       this.url = download(song.id, this.loginsid);
       if (cache) {
         ipcRenderer && ipcRenderer.send('cache', this.url, cacheKey);
         let t = 0;
         const timer = setInterval(() => {
-          const isCached = cache && cache.exist(cacheKey);
+          const isCached = cache && cache.exist(cacheKey, cachePath);
           t++;
 
           if (isCached) {
+            message.success('缓存成功：' + cacheKey);
             runInAction(() => {
-              const index = this.songs[this.song.additional.song_tag.album].findIndex(
-                i => i.id === song.id,
-              );
-              this.songs[this.song.additional.song_tag.album][index] = {
-                ...this.songs[this.song.additional.song_tag.album][index],
+              this.cacheds.push({
+                ...this.song,
                 cached: true,
-              };
-
-              this.current_songs = this.current_songs.map(i => {
-                return {
-                  ...i,
-                  cached: i.id === song.id ? true : i.cached,
-                };
               });
 
-              this.songs.__cached__.push(this.song);
+              this.current_songs = this.current_songs.map(i => ({
+                ...i,
+                cached: this.cacheds.findIndex(c => c.id === i.id) !== -1,
+              }));
             });
           }
 

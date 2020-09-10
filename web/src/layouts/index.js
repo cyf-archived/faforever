@@ -13,10 +13,11 @@ import 'moment/locale/zh-cn';
 import stores from '../stores';
 import * as sty from './index.less';
 let ipcRenderer;
+let remote;
 
 if (window.require) {
   const electron = window.require('electron');
-  ({ ipcRenderer } = electron);
+  ({ ipcRenderer, remote } = electron);
 }
 
 configure({
@@ -51,6 +52,17 @@ class Index extends React.Component {
   //   this.openChat();
   // };
 
+  setCachePath = () => {
+    remote.dialog.showOpenDialog({ properties: ['openDirectory'] }, filename => {
+      if (filename.length === 1) {
+        // console.log(filename[0]);
+        localStorage.setItem('cache-path', filename[0]);
+        ipcRenderer && ipcRenderer.send('cache-path', filename[0]);
+        stores.music.caculateCached();
+      }
+    });
+  };
+
   render() {
     return (
       <ConfigProvider locale={zh_CN}>
@@ -58,10 +70,19 @@ class Index extends React.Component {
           <div className={sty.container}>
             <div className="header">
               <div className="logo">
-                FA FOREVER <span className="version">V1.2.2</span>
+                FA FOREVER <span className="version">V1.3.0</span>
               </div>
               <SearchBar placeholder="搜索歌曲" onSubmit={stores.music.search} />
               <div className="action">
+                <Tooltip
+                  placement="topLeft"
+                  title="指定缓存目录，此功能不支持在线升级，需要下载最新客户端"
+                >
+                  <i className="fa-icon" onClick={this.setCachePath}>
+                    &#xe643;
+                  </i>
+                </Tooltip>
+
                 <Tooltip
                   placement="topLeft"
                   title="当你发现歌库数据不完整时，可以点这里重新缓存歌曲数据"
