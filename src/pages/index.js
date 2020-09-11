@@ -1,28 +1,61 @@
+/*
+ * @Author: RojerChen
+ * @Date: 2020-09-10 12:30:28
+ * @LastEditors: RojerChen
+ * @LastEditTime: 2020-09-11 09:39:10
+ * @FilePath: /fa-forever/src/pages/index.js
+ * @Company: freesailing.cn
+ */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { List, Icon } from 'antd';
 import { NoticeBar } from 'antd-mobile';
 // import Chat from "../components/chat";
+
 import 'moment/locale/zh-cn';
 
 import * as sty from './index.less';
 
+let remote;
+let cache;
+
+if (window.require) {
+  const electron = window.require('electron');
+  ({ remote } = electron);
+  try {
+    if (remote.require) {
+      cache = remote.require('./cache');
+    }
+  } catch (error) {}
+}
+
 @inject('music')
 @observer
 class Index extends React.Component {
-  componentDidMount() {
-    this.load();
-  }
+  componentDidMount() {}
 
-  load = async () => {
-    await this.props.music.login();
-    this.chat && this.chat.connect();
+  show = song => {
+    const { shell } = remote;
+    const cacheKey = song.path.replace(/\/|.mp3/g, '_');
+    const cachePath = localStorage.getItem('cache-path');
+    const path = cache.path(cacheKey, cachePath);
+    shell.showItemInFolder(path);
   };
 
+  renderTime(item) {
+    return `${Math.floor(Number(item.additional.song_audio.duration) / 60)}:${
+      item.additional.song_audio.duration % 60 < 10
+        ? '0' + (item.additional.song_audio.duration % 60)
+        : item.additional.song_audio.duration % 60
+    }`;
+  }
+
   render() {
+    const { note, current_songs } = this.props.music;
+
     return (
       <div className={sty.container}>
-        {this.props.music.note && (
+        {note && (
           <NoticeBar
             marqueeProps={{
               loop: true,
@@ -31,14 +64,13 @@ class Index extends React.Component {
               style: { padding: '0 7.5px' },
             }}
           >
-            {this.props.music.note}
+            {note}
           </NoticeBar>
         )}
 
         <List
           size="small"
-          dataSource={this.props.music.current_songs}
-          loading={this.props.music.listloading}
+          dataSource={current_songs}
           header={
             <List.Item className="header-box">
               <div className="playing" />
@@ -66,15 +98,12 @@ class Index extends React.Component {
               <div className="album">{item.additional.song_tag.album}</div>
               <div className="artist">{item.additional.song_tag.artist}</div>
               <div className="duration">
-                {`${Math.floor(Number(item.additional.song_audio.duration) / 60)}:${
-                  item.additional.song_audio.duration % 60 < 10
-                    ? '0' + (item.additional.song_audio.duration % 60)
-                    : item.additional.song_audio.duration % 60
-                }`}
+                {this.renderTime(item)}
                 {item.cached && (
                   <Icon
                     type="cloud-download"
                     style={{ marginLeft: 4, color: '#e04f4c', fontSize: 12 }}
+                    onClick={this.show.bind(this, item)}
                   />
                 )}
               </div>

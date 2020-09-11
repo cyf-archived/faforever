@@ -6,8 +6,7 @@ import Name from './name';
 import './chat.less';
 import { Button } from 'antd-mobile';
 
-const host = '148.70.4.54:37373';
-// const host = "127.0.0.1:7001";
+const host = '127.0.0.1:7001';
 
 class Chat extends React.Component {
   socket = null;

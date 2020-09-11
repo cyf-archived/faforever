@@ -2,13 +2,18 @@
  * @Author: RojerChen
  * @Date: 2020-09-10 12:30:28
  * @LastEditors: RojerChen
- * @LastEditTime: 2020-09-10 13:57:56
- * @FilePath: /fa-forever/web/.umirc.js
+ * @LastEditTime: 2020-09-11 09:56:06
+ * @FilePath: /fa-forever/.umirc.js
  * @Company: freesailing.cn
  */
 // ref: https://umijs.org/config/
 export default {
+  define: {
+    'process.env.VERSION': 'V1.3.0',
+    'process.env.APPNAME': 'FA FOREVER',
+  },
   treeShaking: true,
+  outputPath: './web_dist',
   routes: [
     {
       path: '/',
@@ -16,6 +21,9 @@ export default {
       routes: [{ path: '/', component: '../pages/index' }],
     },
   ],
+  alias: {
+    '@': require('path').resolve(__dirname, 'src'),
+  },
   hash: true,
   history: 'hash',
   publicPath: 'http://cdn.eqistu.cn/faforever13/',

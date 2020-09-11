@@ -74,13 +74,13 @@ class Index extends React.Component {
           <div className={sty.container}>
             <div className="header">
               <div className="logo">
-                FA FOREVER <span className="version">V1.3.0</span>
+                {process.env.APPNAME} <span className="version">{process.env.VERSION}</span>
               </div>
               <SearchBar placeholder="搜索歌曲" onSubmit={stores.music.search} />
               <div className="action">
                 <Tooltip
                   placement="topLeft"
-                  title="指定缓存目录，此功能不支持在线升级，需要下载最新客户端"
+                  title="指定缓存目录，此功能不支持在线升级，需要下载最新客户端，点击歌曲列表的“小云标志”可以一键打开文件夹"
                 >
                   <i className="fa-icon" onClick={this.setCachePath}>
                     &#xe643;

@@ -1,10 +1,10 @@
 logs/
 dist/
+web_dist/
 npm-debug.log
 yarn-error.log
 node_modules/
 package-lock.json
-yarn.lock
 coverage/
 .idea/
 run/
@@ -12,5 +12,5 @@ run/
 *.sw*
 *.un~
 cache
-pages/.umi
-src/dist
+.umi
+.umi-production

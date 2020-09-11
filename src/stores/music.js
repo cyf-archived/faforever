@@ -25,9 +25,8 @@ class Store {
   @observable song;
   @observable loading;
   @observable url;
-  @observable currentList;
+  @observable current_list;
   @observable note;
-  @observable listloading;
   @observable loginsid;
 
   constructor() {
@@ -35,11 +34,10 @@ class Store {
     this.current_criteria = {};
     this.songs = localStorage['songs'] ? JSON.parse(localStorage['songs']) : {};
     this.cacheds = [];
-    this.currentList = [];
+    this.current_list = [];
     this.current_songs = [];
     this.song = {};
     this.loading = true;
-    this.listloading = false;
     this.url = '';
     this.note = '';
     this.loginsid = '';
@@ -150,7 +148,6 @@ class Store {
 
   @action toggle = criteria => {
     this.current_songs = [];
-    this.listloading = true;
     this.current_criteria = criteria;
     const list = criteria === '__cached__' ? this.cacheds : this.songs[criteria];
     if (Array.isArray(list) && list.length > 0) {
@@ -164,16 +161,13 @@ class Store {
         });
       }
       this.current_songs = data;
-      this.listloading = false;
-    } else {
-      this.listloading = false;
     }
   };
 
   @action play = (song, dclick = true) => {
     this.song = song;
     if (dclick) {
-      this.currentList = this.current_songs;
+      this.current_list = this.current_songs;
     }
 
     this.current_songs = this.current_songs.map(i => {
@@ -199,7 +193,7 @@ class Store {
           t++;
 
           if (isCached) {
-            message.success('缓存成功：' + cacheKey);
+            message.success(`缓存成功：${cacheKey}`);
             runInAction(() => {
               this.cacheds.push({
                 ...this.song,
@@ -223,7 +217,7 @@ class Store {
   };
 
   @action playNext = mode => {
-    if (this.currentList.length > 0 && this.song.id) {
+    if (this.current_list.length > 0 && this.song.id) {
       if (mode === 2) {
         // 单曲
         return;
@@ -231,13 +225,13 @@ class Store {
 
       if (mode === 3) {
         // 单曲
-        const index = Math.floor(Math.random() * this.currentList.length);
-        const song = { ...this.currentList[index] };
+        const index = Math.floor(Math.random() * this.current_list.length);
+        const song = { ...this.current_list[index] };
         this.play(song, false);
         return;
       }
 
-      let index = this.currentList.findIndex(value => {
+      let index = this.current_list.findIndex(value => {
         if (value.id === this.song.id) {
           return true;
         }
@@ -245,14 +239,14 @@ class Store {
       });
 
       index += 1;
-      index = index < this.currentList.length ? index : 0;
-      const song = { ...this.currentList[index] };
+      index = index < this.current_list.length ? index : 0;
+      const song = { ...this.current_list[index] };
       this.play(song, false);
     }
   };
 
   @action playPre = mode => {
-    if (this.currentList.length > 0 && this.song.id) {
+    if (this.current_list.length > 0 && this.song.id) {
       if (mode === 2) {
         // 单曲
         return;
@@ -260,13 +254,13 @@ class Store {
 
       if (mode === 3) {
         // 单曲
-        const index = Math.floor(Math.random() * this.currentList.length);
-        const song = { ...this.currentList[index] };
+        const index = Math.floor(Math.random() * this.current_list.length);
+        const song = { ...this.current_list[index] };
         this.play(song, false);
         return;
       }
 
-      let index = this.currentList.findIndex(value => {
+      let index = this.current_list.findIndex(value => {
         if (value.id === this.song.id) {
           return true;
         }
@@ -275,7 +269,7 @@ class Store {
 
       index -= 1;
       index = index < 0 ? 0 : index;
-      const song = { ...this.currentList[index] };
+      const song = { ...this.current_list[index] };
       this.play(song, false);
       return;
     }
@@ -285,7 +279,6 @@ class Store {
     if (!key) {
       return;
     }
-    this.listloading = true;
     const allSongs = Object.keys(this.songs).reduce((res, key) => {
       for (const song of this.songs[key]) {
         res.push({
@@ -304,7 +297,6 @@ class Store {
 
     this.current_songs = filterSongs;
     this.current_criteria = '';
-    this.listloading = false;
   };
 }
 
