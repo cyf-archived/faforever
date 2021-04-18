@@ -152,7 +152,8 @@ class Criteria extends React.Component {
                       content: <div>
                         <p>贡献歌词前往：https://github.com/rojer95/faforever-lrc</p>
                         <p>此歌曲LRC文件需命名为：{this.props.music.key}.lrc</p>
-                        <p>文件编码需为UTF8</p>
+                        <p>注意文件编码需为UTF8</p>
+                        <p>歌词思路来自工程群内的搬运工指路=》https://github.com/cdmfw/cyf</p>
                       </div>,
                       okText: '我知道了',
                       cancelText: '关闭'
