@@ -58,7 +58,7 @@
       display: flex;
       justify-content: space-between;
       height: ~'calc(100vh - 50px - 70px)';
-      .criteria {
+      .nav {
         width: 220px;
         background-color: #f5f5f7;
         height: ~'calc(100vh - 50px - 70px)';
@@ -68,11 +68,15 @@
           list-style: none;
           width: 220px;
           li {
+
+            &.my{
+              padding-left: 25px;
+            }
             display: flex;
             align-items: center;
             justify-content: space-between;
             height: 40px;
-            padding-left: 10px;
+            padding: 0px 10px;
             color: #111111;
             cursor: pointer;
             img {
@@ -93,6 +97,10 @@
             .anticon {
               margin-right: 5px;
             }
+
+            .btn{
+              cursor: pointer;
+            }
           }
         }
       }
@@ -100,6 +108,7 @@
         flex-grow: 1;
         position: relative;
         background-color: white;
+        overflow-y: auto;
       }
     }
   }

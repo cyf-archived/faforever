@@ -147,20 +147,40 @@ class Store {
   });
 
   @action toggle = criteria => {
-    this.current_songs = [];
-    this.current_criteria = criteria;
-    const list = criteria === '__cached__' ? this.cacheds : this.songs[criteria];
-    if (Array.isArray(list) && list.length > 0) {
-      const data = [];
-      for (let index = 0; index < list.length; index++) {
-        const element = list[index];
-        data.push({
-          ...element,
-          playing: element.id === this.song.id,
-          cached: this.cacheds.findIndex(c => c.id === element.id) !== -1,
-        });
+    if (typeof criteria === 'string') {
+      this.loading = true;
+      this.current_songs = [];
+      this.current_criteria = criteria;
+      const list = criteria === '__cached__' ? this.cacheds : this.songs[criteria];
+      if (Array.isArray(list) && list.length > 0) {
+        const data = [];
+        for (let index = 0; index < list.length; index++) {
+          const element = list[index];
+          data.push({
+            ...element,
+            playing: element.id === this.song.id,
+            cached: this.cacheds.findIndex(c => c.id === element.id) !== -1,
+          });
+        }
+        this.current_songs = data;
       }
-      this.current_songs = data;
+      this.loading = false;
+    } else if (Array.isArray(criteria)) {
+      this.current_songs = [];
+      this.current_criteria = '';
+      const list = criteria;
+      if (Array.isArray(list) && list.length > 0) {
+        const data = [];
+        for (let index = 0; index < list.length; index++) {
+          const element = list[index];
+          data.push({
+            ...element,
+            playing: element.id === this.song.id,
+            cached: this.cacheds.findIndex(c => c.id === element.id) !== -1,
+          });
+        }
+        this.current_songs = data;
+      }
     }
   };
 

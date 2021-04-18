@@ -1,7 +1,7 @@
 import music from './music';
-// import chat from "./chat";
+import my from "./my";
 
 export default {
   music,
-  // chat
+  my
 };

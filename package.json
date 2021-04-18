@@ -4,19 +4,22 @@
   "version": "1.3.0",
   "scripts": {
     "dev": "concurrently -n=umi,electron -c=blue,green -p=[{name}]  \"umi dev\" \"wait-on http://localhost:8000 && cross-env FA_NODE_ENV=dev electron .\"",
+    "build": "umi build",
     "package:win": "electron-builder --win --ia32 --x64",
     "package:mac": "electron-builder --mac",
     "package:linux": "electron-builder --linux"
   },
   "main": "./src/main.js",
   "dependencies": {
+    "@mebtte/react-lrc": "^1.0.2",
     "antd": "^3.19.5",
     "axios": "^0.19.1",
     "mobx": "^5.15.2",
     "mobx-react": "^6.1.5",
     "react": "^16.8.6",
-    "react-contexify": "^4.1.1",
-    "react-dom": "^16.8.6"
+    "react-contexify": "^5.0.0",
+    "react-dom": "^16.8.6",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",

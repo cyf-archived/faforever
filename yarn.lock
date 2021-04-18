@@ -1514,6 +1514,11 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
+"@mebtte/react-lrc@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/@mebtte/react-lrc/download/@mebtte/react-lrc-1.0.2.tgz#2cfb4ce93aa4d46490bc562403ef075fad174e8a"
+  integrity sha1-LPtM6Tqk1GSQvFYkA+8HX60XToo=
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.npm.taobao.org/@mrmlnc/readdir-enhanced/download/@mrmlnc/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -4272,6 +4277,11 @@ cloneable-readable@^1.0.0:
     inherits "^2.0.1"
     process-nextick-args "^2.0.0"
     readable-stream "^2.3.5"
+
+clsx@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/clsx/download/clsx-1.1.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fclsx%2Fdownload%2Fclsx-1.1.1.tgz#98b3134f9abbdf23b2663491ace13c5c03a73188"
+  integrity sha1-mLMTT5q73yOyZjSRrOE8XAOnMYg=
 
 co@^4.6.0:
   version "4.6.0"
@@ -14081,13 +14091,12 @@ rc@^1.1.2, rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-contexify@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.npm.taobao.org/react-contexify/download/react-contexify-4.1.1.tgz#f5eba1ad82a923c033c91d0abcea1da0a71ebaa1"
-  integrity sha1-9euhrYKpI8AzyR0KvOodoKceuqE=
+react-contexify@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npm.taobao.org/react-contexify/download/react-contexify-5.0.0.tgz#11b477550a0ee5a9a144399bc17c7c56bbc60057"
+  integrity sha1-EbR3VQoO5amhRDmbwXx8VrvGAFc=
   dependencies:
-    classnames "^2.2.6"
-    prop-types "^15.6.2"
+    clsx "^1.1.1"
 
 react-dev-utils@9.0.1:
   version "9.0.1"
@@ -17934,6 +17943,11 @@ uuid@^3.0.1, uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.npm.taobao.org/uuid/download/uuid-3.4.0.tgz?cache=0&sync_timestamp=1595887683255&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fuuid%2Fdownload%2Fuuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha1-sj5DWK+oogL+ehAK8fX4g/AgB+4=
+
+uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.npm.taobao.org/uuid/download/uuid-8.3.2.tgz?cache=0&sync_timestamp=1607458532020&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fuuid%2Fdownload%2Fuuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha1-gNW1ztJxu5r2xEXyGhoExgbO++I=
 
 v8-compile-cache@^2.0.3, v8-compile-cache@^2.1.1:
   version "2.1.1"

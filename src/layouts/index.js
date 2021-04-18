@@ -5,10 +5,11 @@ import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
 import { SearchBar } from 'antd-mobile';
 
-import Criteria from '../components/criteria';
+import Nav from '../components/nav';
 import Player from '../components/player';
 
 import 'moment/locale/zh-cn';
+// import 'react-contexify/dist/ReactContexify.css';
 
 import stores from '../stores';
 import * as sty from './index.less';
@@ -51,10 +52,6 @@ class Index extends React.Component {
     stores.music.reload();
   };
 
-  // startChat = () => {
-  //   this.chat.connect();
-  //   this.openChat();
-  // };
 
   setCachePath = () => {
     remote.dialog.showOpenDialog({ properties: ['openDirectory'] }, filename => {
@@ -101,8 +98,8 @@ class Index extends React.Component {
             </div>
 
             <div className="main">
-              <div className="criteria">
-                <Criteria />
+              <div className="nav">
+                <Nav />
               </div>
 
               <div className="content">{this.props.children}</div>
