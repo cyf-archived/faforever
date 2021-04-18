@@ -52,7 +52,6 @@ class Index extends React.Component {
     stores.music.reload();
   };
 
-
   setCachePath = () => {
     remote.dialog.showOpenDialog({ properties: ['openDirectory'] }, filename => {
       if (filename.length === 1) {
@@ -73,7 +72,13 @@ class Index extends React.Component {
               <div className="logo">
                 {process.env.APPNAME} <span className="version">{process.env.VERSION}</span>
               </div>
-              <SearchBar placeholder="搜索歌曲" onSubmit={stores.music.search} />
+              <SearchBar
+                placeholder="搜索歌曲"
+                onSubmit={key => {
+                  stores.music.search(key);
+                  stores.my.toggle('list');
+                }}
+              />
               <div className="action">
                 <Tooltip
                   placement="topLeft"
