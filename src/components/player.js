@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, Slider, message, Icon, Modal } from 'antd';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import './player.less';
 import Playing from './playlist';
 import Lrc from './lrc';
@@ -140,25 +141,51 @@ class Criteria extends React.Component {
                 {this.state.downloading ? <Icon type="loading" /> : null}
                 {this.props.music.song.title || '-'}
                 {this.props.music.lrc ? (
-                  <span className="lrc-tag" onClick={()=>{
-                    this.setState({
-                      showlrc: !this.state.showlrc
-                    })
-                  }}>词</span>
+                  <span
+                    className="lrc-tag"
+                    onClick={() => {
+                      this.setState({
+                        showlrc: !this.state.showlrc,
+                      });
+                    }}
+                  >
+                    词
+                  </span>
                 ) : (
-                  <span className="not-lrc" onClick={()=>{
-                    Modal.confirm({
-                      title: '现在还没有歌词',
-                      content: <div>
-                        <p>贡献歌词前往：https://github.com/rojer95/faforever-lrc</p>
-                        <p>此歌曲LRC文件需命名为：{this.props.music.key}.lrc</p>
-                        <p>注意文件编码需为UTF8</p>
-                        <p>歌词思路来自工程群内的搬运工，指路=》https://github.com/cdmfw/cyf</p>
-                      </div>,
-                      okText: '我知道了',
-                      cancelText: '关闭'
-                    })
-                  }}>词</span>
+                  <span
+                    className="not-lrc"
+                    onClick={() => {
+                      Modal.confirm({
+                        title: '现在还没有歌词',
+                        content: (
+                          <div>
+                            <CopyToClipboard
+                              text='https://github.com/rojer95/faforever-lrc'
+                              onCopy={() => {
+                                message.success('复制成功');
+                              }}
+                            >
+                              <p>贡献歌词前往：<span style={{ color: '#0091ff', cursor: 'pointer'}}>https://github.com/rojer95/faforever-lrc</span></p>
+                            </CopyToClipboard>
+                            <CopyToClipboard
+                              text={`${this.props.music.key}.lrc`}
+                              onCopy={() => {
+                                message.success('复制成功');
+                              }}
+                            >
+                              <p>此歌曲LRC文件需命名为：<span style={{ color: '#0091ff', cursor: 'pointer'}}>{this.props.music.key}.lrc</span></p>
+                            </CopyToClipboard>
+                            <p>注意文件编码需为UTF8</p>
+                            <p>歌词思路来自工程群内的搬运工，指路=》https://github.com/cdmfw/cyf</p>
+                          </div>
+                        ),
+                        okText: '我知道了',
+                        cancelText: '关闭',
+                      });
+                    }}
+                  >
+                    词
+                  </span>
                 )}
               </div>
               <div className="timer">
