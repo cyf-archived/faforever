@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, Slider, message, Icon } from 'antd';
 import './player.less';
+import Playing from './playlist';
 
 @inject('music')
 @observer
@@ -14,6 +15,7 @@ class Criteria extends React.Component {
     currentTime: 0,
     duration: 0,
     mode: 1,
+    showlist: false,
   };
 
   componentDidMount() {
@@ -183,44 +185,38 @@ class Criteria extends React.Component {
           <Slider
             value={this.state.volume}
             onChange={this.handleChange}
-            step={0.01}
+            step={0.1}
             min={0}
             max={1}
             tipFormatter={this.formatter}
           />
           <div className="actions">
-            {this.state.mode === 1 && (
-              <i
-                className="fa-icon"
-                onClick={() => {
-                  this.toggleMode(2);
-                }}
-              >
-                &#xe609;
-              </i>
-            )}
-            {this.state.mode === 2 && (
-              <i
-                className="fa-icon"
-                onClick={() => {
-                  this.toggleMode(3);
-                }}
-              >
-                &#xe66d;
-              </i>
-            )}
-            {this.state.mode === 3 && (
-              <i
-                className="fa-icon"
-                onClick={() => {
-                  this.toggleMode(1);
-                }}
-              >
-                &#xe622;
-              </i>
-            )}
+            <Icon
+              type="unordered-list"
+              style={{ marginLeft: 12 }}
+              onClick={() => {
+                this.setState({
+                  showlist: !this.state.showlist,
+                });
+              }}
+            />
           </div>
         </div>
+        {this.state.showlist && (
+          <div
+            className="playingbox"
+            style={{ visibility: this.state.showlist ? 'visible' : 'hidden' }}
+          >
+            <Playing
+              mode={this.state.mode}
+              onChange={mode => {
+                this.setState({
+                  mode,
+                });
+              }}
+            />
+          </div>
+        )}
       </div>
     );
   }

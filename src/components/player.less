@@ -15,6 +15,20 @@
     background-color: #fff;
     position: relative;
 
+    .playingbox{
+      background-color: #FFFFFF;
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      bottom: 70px;
+      right: 6px;
+      overflow: auto;
+      padding: 8px;
+      border: 1px solid #e8e8e8 ;
+      z-index: 998;
+    }
+
+
     .control {
       flex-shrink: 0;
     }
@@ -25,6 +39,7 @@
       height: 6px;
       left: 0;
       top: -6px;
+      z-index: 999;
       .ant-slider {
         margin: 0;
       }
@@ -71,14 +86,15 @@
 
     .sound {
       margin-left: 180px;
-      width: 120px;
+      flex-shrink: 0;
       position: relative;
       padding-left: 25px;
       display: flex;
       align-items: center;
 
       .ant-slider {
-        flex-grow: 1;
+      width: 70px;
+      flex-grow: 1;
       }
     }
 

@@ -184,12 +184,14 @@ class Store {
     }
   };
 
-  @action play = (song, dclick = true) => {
+  @action play = (song) => {
     this.song = song;
-    if (dclick) {
-      this.current_list = this.current_songs;
-    }
-
+    this.current_list = this.current_songs.map(i => {
+      return {
+        ...i,
+        playing: i.id === song.id,
+      };
+    });
     this.current_songs = this.current_songs.map(i => {
       return {
         ...i,
@@ -244,7 +246,7 @@ class Store {
       }
 
       if (mode === 3) {
-        // 单曲
+        // 随机
         const index = Math.floor(Math.random() * this.current_list.length);
         const song = { ...this.current_list[index] };
         this.play(song, false);
