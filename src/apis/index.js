@@ -34,3 +34,7 @@ export const download = (id, sid) => {
 export const note = () => {
   return request(`http://cdn.eqistu.cn/faforever/note.txt?t=${new Date().valueOf()}`);
 };
+
+export const lrc = (url) => {
+  return request(url);
+};

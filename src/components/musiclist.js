@@ -51,6 +51,7 @@ class Index extends React.Component {
           <Submenu label="添加至">
             {list.map(i => (
               <Item
+                key={i.uuid}
                 onClick={e => {
                   const { props } = e;
                   this.props.my.push(i.uuid, props.data);

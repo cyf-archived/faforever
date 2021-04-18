@@ -15,6 +15,19 @@
     background-color: #fff;
     position: relative;
 
+    .lrc{
+      background-color: #FFFFFF;
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      bottom: 70px;
+      left: 0px;
+      overflow: auto;
+      padding: 8px;
+      border: 1px solid #e8e8e8;
+      z-index: 998;
+    }
+
     .playingbox{
       background-color: #FFFFFF;
       position: absolute;
@@ -77,6 +90,22 @@
       .timer {
         font-size: 12px;
         color: rgba(0, 0, 0, 0.4);
+      }
+
+      .lrc-tag, .not-lrc{
+        color: #e04f4c;
+        margin-left: 10px;
+        font-size: 10px;
+        border: 1px solid  #e04f4c;
+        padding: 0px 2px;
+        border-radius: 4px;
+        cursor: pointer;
+        position: relative;
+        top: -2px;
+      }
+      .not-lrc{
+        color: gray;
+        border-color: gray;
       }
     }
 

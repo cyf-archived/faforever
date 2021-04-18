@@ -1514,11 +1514,6 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@mebtte/react-lrc@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.npm.taobao.org/@mebtte/react-lrc/download/@mebtte/react-lrc-1.0.2.tgz#2cfb4ce93aa4d46490bc562403ef075fad174e8a"
-  integrity sha1-LPtM6Tqk1GSQvFYkA+8HX60XToo=
-
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.npm.taobao.org/@mrmlnc/readdir-enhanced/download/@mrmlnc/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"

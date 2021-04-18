@@ -1,5 +1,5 @@
 import { observable, flow, action, runInAction } from 'mobx';
-import { getEntry, getSongs, download, note, login } from '../apis';
+import { getEntry, getSongs, download, note, login, lrc as lrcApi } from '../apis';
 import { message } from 'antd';
 
 let remote;
@@ -27,6 +27,7 @@ class Store {
   @observable url;
   @observable current_list;
   @observable note;
+  @observable lrc;
   @observable loginsid;
 
   constructor() {
@@ -39,6 +40,8 @@ class Store {
     this.song = {};
     this.loading = true;
     this.url = '';
+    this.lrc = '';
+    this.key = '';
     this.note = '';
     this.loginsid = '';
   }
@@ -146,6 +149,15 @@ class Store {
     }
   });
 
+  loadLrc = flow(function*(url) {
+    try {
+      this.lrc = (yield lrcApi(url)).data;
+      console.log(this.lrc);
+    } catch (error) {
+      this.lrc = '';
+    }
+  });
+
   @action toggle = criteria => {
     if (typeof criteria === 'string') {
       this.loading = true;
@@ -184,8 +196,9 @@ class Store {
     }
   };
 
-  @action play = (song) => {
+  @action play = song => {
     this.song = song;
+    this.lrc = '';
     this.current_list = this.current_songs.map(i => {
       return {
         ...i,
@@ -200,7 +213,9 @@ class Store {
     });
 
     const cacheKey = song.path.replace(/\/|.mp3/g, '_');
-    // console.log(cacheKey);
+    this.key = song.title;
+    const lrcurl = `https://cdn.jsdelivr.net/gh/rojer95/faforever-lrc@master/${song.title}.lrc`;
+    this.loadLrc(lrcurl);
     const cachePath = localStorage.getItem('cache-path');
 
     if (cache && cache.exist(cacheKey, cachePath)) {
