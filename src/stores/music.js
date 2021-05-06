@@ -27,6 +27,7 @@ if (window.require) {
 class Store {
   @observable criteria;
   @observable current_criteria;
+  @observable current_like;
   @observable songs;
   @observable cacheds;
   @observable current_songs;
@@ -41,6 +42,7 @@ class Store {
   constructor() {
     this.criteria = localStorage['criteria'] ? JSON.parse(localStorage['criteria']) : [];
     this.current_criteria = {};
+    this.current_like = '';
     this.songs = localStorage['songs'] ? JSON.parse(localStorage['songs']) : {};
     this.cacheds = [];
     this.current_list = [];
@@ -182,7 +184,12 @@ class Store {
     }
   });
 
-  @action toggle = criteria => {
+  @action toggle = (criteria, like_uuid = false) => {
+    if (like_uuid) {
+      this.current_like = like_uuid;
+    } else {
+      this.current_like = '';
+    }
     if (typeof criteria === 'string') {
       this.loading = true;
       this.current_songs = [];

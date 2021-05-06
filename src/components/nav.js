@@ -41,7 +41,7 @@ class Criteria extends React.Component {
       this.setState({
         active: active.uuid
       });
-      this.props.music.toggle(active.musics);
+      this.props.music.toggle(active.musics, active.uuid);
       this.props.my.toggle('list');
     }
   };

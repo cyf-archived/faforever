@@ -42,7 +42,7 @@ class Index extends React.Component {
   }
 
   render() {
-    const { current_songs } = this.props.music;
+    const { current_songs, current_like } = this.props.music;
     const { list = [] } = this.props.my;
 
     return (
@@ -61,6 +61,17 @@ class Index extends React.Component {
               </Item>
             ))}
           </Submenu>
+          {current_like && (
+            <Item
+              onClick={e => {
+                const { props } = e;
+                const musics = this.props.my.pop(current_like, props.data);
+                this.props.music.toggle(musics, current_like);
+              }}
+            >
+              移出歌单
+            </Item>
+          )}
         </Menu>
 
         <List
@@ -86,7 +97,7 @@ class Index extends React.Component {
                   id: 'mylist',
                   event: e,
                   props: {
-                    data: item
+                    data: item,
                   },
                 });
               }}

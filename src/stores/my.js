@@ -50,10 +50,10 @@ class Store {
 
   @action toggle = mode => {
     this.mode = mode;
-  }
+  };
 
   @action push = (uuid, music) => {
-    const newlist = [...this.list]
+    const newlist = [...this.list];
     const current = newlist.find(i => i.uuid === uuid);
     if (current) {
       current.musics.push(music);
@@ -62,7 +62,18 @@ class Store {
     localStorage['mylist'] = JSON.stringify(newlist);
   };
 
-
+  @action pop = (uuid, music) => {
+    const newlist = [...this.list];
+    const current = newlist.find(i => i.uuid === uuid);
+    let musics;
+    if (current) {
+      musics = [...current.musics].filter(i => i.id != music.id);
+      current.musics = musics;
+    }
+    this.list = newlist;
+    localStorage['mylist'] = JSON.stringify(newlist);
+    return musics;
+  };
 }
 
 export default new Store();
