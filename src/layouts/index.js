@@ -15,10 +15,11 @@ import stores from '../stores';
 import * as sty from './index.less';
 let ipcRenderer;
 let remote;
+let shell;
 
 if (window.require) {
   const electron = window.require('electron');
-  ({ ipcRenderer, remote } = electron);
+  ({ ipcRenderer, remote, shell } = electron);
 }
 
 configure({
@@ -79,7 +80,17 @@ class Index extends React.Component {
                   stores.my.toggle('list');
                 }}
               />
+
               <div className="action">
+                <Tooltip
+                  placement="topLeft"
+                  title="MAC端 测试版 在开启歌词面板且有歌词情况下，可以在状态栏显示歌词 提取码:bgmr | WIN不支持"
+                >
+                  <span onClick={()=>{
+                    shell.openExternal('https://pan.baidu.com/s/11foxsV9V_9eNjFBwkqXSZQ');
+                  }} style={{ fontSize: 10, cursor: 'pointer' }}>bate</span>
+                </Tooltip>
+
                 <Tooltip
                   placement="topLeft"
                   title="指定缓存目录，此功能不支持在线升级，需要下载最新客户端，点击歌曲列表的“小云标志”可以一键打开文件夹"
@@ -97,6 +108,7 @@ class Index extends React.Component {
                     &#xe6ba;
                   </i>
                 </Tooltip>
+
                 <Icon type="minus" onClick={this.minWin} />
                 <Icon type="close" onClick={this.close} />
               </div>
