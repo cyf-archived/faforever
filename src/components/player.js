@@ -181,7 +181,6 @@ class Criteria extends React.Component {
                   ) : (
                     <span
                       className="not-lrc"
-                      onDoubleClick={this.loadLocalLrc}
                       onClick={() => {
                         Modal.confirm({
                           title: '现在还没有歌词',
@@ -205,6 +204,12 @@ class Criteria extends React.Component {
                               <p>
                                 歌词思路来自工程群内的搬运工，指路=》https://github.com/cdmfw/cyf
                               </p>
+
+                              <p onClick={this.loadLocalLrc}>
+                                  <span style={{ color: '#0091ff', cursor: 'pointer' }}>
+                                    导入本地LRC歌词
+                                  </span>
+                                </p>
                             </div>
                           ),
                           onOk: () => {
