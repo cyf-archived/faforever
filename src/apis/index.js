@@ -35,6 +35,10 @@ export const note = () => {
   return request(`http://cdn.eqistu.cn/faforever/note.txt?t=${new Date().valueOf()}`);
 };
 
-export const lrc = (url) => {
+export const lrc = url => {
   return request(url);
+};
+
+export const gecimi = title => {
+  return request(`http://gecimi.com/api/lyric/${encodeURIComponent(title)}`);
 };

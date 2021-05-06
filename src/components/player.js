@@ -6,6 +6,17 @@ import './player.less';
 import Playing from './playlist';
 import Lrc from './lrc';
 
+
+
+let shell;
+
+if (window.require) {
+  const electron = window.require('electron');
+  ({ shell } = electron);
+}
+
+
+
 @inject('music')
 @observer
 class Criteria extends React.Component {
@@ -159,27 +170,31 @@ class Criteria extends React.Component {
                         title: '现在还没有歌词',
                         content: (
                           <div>
-                            <CopyToClipboard
-                              text='https://github.com/rojer95/faforever-lrc'
-                              onCopy={() => {
-                                message.success('复制成功');
-                              }}
-                            >
-                              <p>贡献歌词前往：<span style={{ color: '#0091ff', cursor: 'pointer'}}>https://github.com/rojer95/faforever-lrc</span></p>
-                            </CopyToClipboard>
+                            
                             <CopyToClipboard
                               text={`${this.props.music.key}.lrc`}
                               onCopy={() => {
                                 message.success('复制成功');
                               }}
                             >
-                              <p>此歌曲LRC文件需命名为：<span style={{ color: '#0091ff', cursor: 'pointer'}}>{this.props.music.key}.lrc</span></p>
+                              <p>
+                                文件名为：
+                                <span style={{ color: '#0091ff', cursor: 'pointer' }}>
+                                  {this.props.music.key}.lrc [点击复制文件名]
+                                </span>
+                              </p>
                             </CopyToClipboard>
+
+                       
+
                             <p>注意文件编码需为UTF8</p>
                             <p>歌词思路来自工程群内的搬运工，指路=》https://github.com/cdmfw/cyf</p>
                           </div>
                         ),
-                        okText: '我知道了',
+                        onOk: ()=>{
+                          shell.openExternal('https://gitee.com/rojerchen/faforever-lrc')
+                        },
+                        okText: '去贡献歌词',
                         cancelText: '关闭',
                       });
                     }}

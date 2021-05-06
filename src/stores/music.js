@@ -1,5 +1,13 @@
-import { observable, flow, action, runInAction } from 'mobx';
-import { getEntry, getSongs, download, note, login, lrc as lrcApi } from '../apis';
+import { observable, flow, action, runInAction, toJS } from 'mobx';
+import {
+  getEntry,
+  getSongs,
+  download,
+  note,
+  login,
+  lrc as lrcApi,
+  gecimi as gecimiApi
+} from '../apis';
 import { message } from 'antd';
 
 let remote;
@@ -149,11 +157,27 @@ class Store {
     }
   });
 
-  loadLrc = flow(function*(url) {
+  loadLrc = flow(function*(url, title) {
     try {
+      
       this.lrc = (yield lrcApi(url)).data;
-      console.log(this.lrc);
     } catch (error) {
+      // const titles = title.split('-');
+      // const song_title = titles[titles.length - 1];
+      // const { data } = yield gecimiApi(song_title.trim());
+      // if (data.result.length > 0) {
+      //   for (const lrcitem of data.result) {
+      //     const lrcstr = (yield lrcApi(lrcitem.lrc)).data;
+      //     const islrc = lrcstr.indexOf('[');
+      //     if (islrc === 0) {
+      //       this.lrc =
+      //         '[00:00.00] 歌词源自 gecimi.com \n[00:00.00] 野生歌词可能不准或错误，请见谅\n[00:00.00] \n' + lrcstr;
+      //       console.log(this.lrc);
+      //       return;
+      //     }
+      //   }
+      // }
+
       this.lrc = '';
     }
   });
@@ -214,8 +238,8 @@ class Store {
 
     const cacheKey = song.path.replace(/\/|.mp3/g, '_');
     this.key = song.title;
-    const lrcurl = `https://cdn.jsdelivr.net/gh/rojer95/faforever-lrc@master/${song.title}.lrc`;
-    this.loadLrc(lrcurl);
+    const lrcurl = `https://gitee.com/rojerchen/faforever-lrc/raw/master/${song.title}.lrc`;
+    this.loadLrc(lrcurl, song.title);
     const cachePath = localStorage.getItem('cache-path');
 
     if (cache && cache.exist(cacheKey, cachePath)) {

@@ -39,6 +39,11 @@ class Criteria extends React.Component {
               </li>
             ))}
           </ul>
+          <p style={{
+            textAlign:'center',
+            fontSize: 12,
+            color: '#d6d5d5'
+          }}>若专辑封面不显示，请点击右上角<span style={{ margin: '0px 6px'}}>☁️</span>标志</p>
         </Spin>
       </div>
     );
