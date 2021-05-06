@@ -6,7 +6,7 @@ import {
   note,
   login,
   lrc as lrcApi,
-  gecimi as gecimiApi
+  // gecimi as gecimiApi
 } from '../apis';
 import { message } from 'antd';
 
@@ -177,7 +177,7 @@ class Store {
       //     }
       //   }
       // }
-
+      ipcRenderer && ipcRenderer.send('set-lrc', '');
       this.lrc = '';
     }
   });

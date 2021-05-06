@@ -1,21 +1,19 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Slider, message, Icon, Modal } from 'antd';
+import { Button, Slider, message, Icon, Modal, Tooltip } from 'antd';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import './player.less';
 import Playing from './playlist';
 import Lrc from './lrc';
 
-
-
+let ipcRenderer;
 let shell;
+let remote;
 
 if (window.require) {
   const electron = window.require('electron');
-  ({ shell } = electron);
+  ({ shell, remote, ipcRenderer } = electron);
 }
-
-
 
 @inject('music')
 @observer
@@ -118,6 +116,17 @@ class Criteria extends React.Component {
     });
   };
 
+  loadLocalLrc = () => {
+    remote.dialog.showOpenDialog({ properties: ['openFile'] }, filename => {
+      if (filename && filename.length === 1) {
+        this.props.music.loadLrc('file://' + filename[0]);
+        this.setState({
+          showlrc: true,
+        });
+      }
+    });
+  };
+
   render() {
     return (
       <div className="player">
@@ -151,57 +160,65 @@ class Criteria extends React.Component {
               <div className="title">
                 {this.state.downloading ? <Icon type="loading" /> : null}
                 {this.props.music.song.title || '-'}
-                {this.props.music.lrc ? (
-                  <span
-                    className="lrc-tag"
-                    onClick={() => {
-                      this.setState({
-                        showlrc: !this.state.showlrc,
-                      });
-                    }}
-                  >
-                    词
-                  </span>
-                ) : (
-                  <span
-                    className="not-lrc"
-                    onClick={() => {
-                      Modal.confirm({
-                        title: '现在还没有歌词',
-                        content: (
-                          <div>
-                            
-                            <CopyToClipboard
-                              text={`${this.props.music.key}.lrc`}
-                              onCopy={() => {
-                                message.success('复制成功');
-                              }}
-                            >
+                <Tooltip title="双击可导入本地歌词">
+                  {this.props.music.lrc ? (
+                    <span
+                      className="lrc-tag"
+                      onDoubleClick={this.loadLocalLrc}
+                      onClick={() => {
+                        this.setState(
+                          {
+                            showlrc: !this.state.showlrc,
+                          },
+                          () => {
+                            if (!this.state.showlrc) ipcRenderer && ipcRenderer.send('set-lrc', '');
+                          },
+                        );
+                      }}
+                    >
+                      词
+                    </span>
+                  ) : (
+                    <span
+                      className="not-lrc"
+                      onDoubleClick={this.loadLocalLrc}
+                      onClick={() => {
+                        Modal.confirm({
+                          title: '现在还没有歌词',
+                          content: (
+                            <div>
+                              <CopyToClipboard
+                                text={`${this.props.music.key}.lrc`}
+                                onCopy={() => {
+                                  message.success('复制成功');
+                                }}
+                              >
+                                <p>
+                                  文件名为：
+                                  <span style={{ color: '#0091ff', cursor: 'pointer' }}>
+                                    {this.props.music.key}.lrc [点击复制文件名]
+                                  </span>
+                                </p>
+                              </CopyToClipboard>
+
+                              <p>注意文件编码需为UTF8</p>
                               <p>
-                                文件名为：
-                                <span style={{ color: '#0091ff', cursor: 'pointer' }}>
-                                  {this.props.music.key}.lrc [点击复制文件名]
-                                </span>
+                                歌词思路来自工程群内的搬运工，指路=》https://github.com/cdmfw/cyf
                               </p>
-                            </CopyToClipboard>
-
-                       
-
-                            <p>注意文件编码需为UTF8</p>
-                            <p>歌词思路来自工程群内的搬运工，指路=》https://github.com/cdmfw/cyf</p>
-                          </div>
-                        ),
-                        onOk: ()=>{
-                          shell.openExternal('https://gitee.com/rojerchen/faforever-lrc')
-                        },
-                        okText: '去贡献歌词',
-                        cancelText: '关闭',
-                      });
-                    }}
-                  >
-                    词
-                  </span>
-                )}
+                            </div>
+                          ),
+                          onOk: () => {
+                            shell.openExternal('https://gitee.com/rojerchen/faforever-lrc');
+                          },
+                          okText: '去贡献歌词',
+                          cancelText: '关闭',
+                        });
+                      }}
+                    >
+                      词
+                    </span>
+                  )}
+                </Tooltip>
               </div>
               <div className="timer">
                 {Math.floor(Number(this.state.currentTime) / 60)}:

@@ -1,3 +1,10 @@
+let ipcRenderer;
+
+if (window.require) {
+  const electron = window.require('electron');
+  ({ ipcRenderer } = electron);
+}
+
 (function () {
 	// The constrcutor can be empty or passed in the lrc string
 	var Lyricer = function (options) {
@@ -25,13 +32,18 @@
 		var lrcAllRegex = /(\[[0-9.:\[\]]*\])+(.*)/;
 		var timeRegex = /\[([0-9]+):([0-9.]+)\]/;
 		var rawLrcArray = rawLrc.split(/[\r\n]/);
+		var offset = 0;
 		for (var i = 0; i < rawLrcArray.length; i++) {
 			// handle tags first
 			var tag = tagRegex.exec(rawLrcArray[i]);
 			if ( tag && tag[0] ) {
 				this.tags[tag[1]] = tag[2];
+				if (tag[1] === 'offset' && !isNaN(tag[2])) {
+					offset = Number(tag[2]) / 1000;
+				}
 				continue;
 			}
+			console.log(offset);
 			// handle lrc
 			var lrc = lrcAllRegex.exec(rawLrcArray[i]);
 			if ( lrc && lrc[0] ) {
@@ -39,11 +51,13 @@
 				for (var j = 0; j < times.length; j++) {
 					var time = timeRegex.exec(times[j]);
 					if ( time && time[0] ) {
-						this.lrc.push( { "starttime": parseInt(time[1],10) * 60 + parseFloat(time[2]), "line": lrc[2] } );
+						this.lrc.push( { "starttime": offset + parseInt(time[1],10) * 60 + parseFloat(time[2]), "line": lrc[2] } );
 					};
 				};
 			};
 		};
+
+		console.log(this.lrc);
 
 		//sort lrc array
 		this.lrc.sort(function (a,b) {
@@ -119,6 +133,7 @@
 			if (time >= this.rangeLrc[i].starttime && time < this.rangeLrc[i].endtime) {
 				this.currentLine = i;
 				moveToLine(this,this.currentLine);
+				ipcRenderer && ipcRenderer.send('set-lrc', this.rangeLrc[i].line);
 				return;
 			};
 		};

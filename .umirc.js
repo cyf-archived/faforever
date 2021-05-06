@@ -9,7 +9,7 @@
 // ref: https://umijs.org/config/
 export default {
   define: {
-    'process.env.VERSION': 'V1.3.0',
+    'process.env.VERSION': 'V1.4.0',
     'process.env.APPNAME': 'FA FOREVER',
   },
   treeShaking: true,

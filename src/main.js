@@ -106,3 +106,7 @@ ipcMain.on('cache', (evt, url, id) => {
 ipcMain.on('cache-path', (evt, url) => {
   cachePath = url;
 });
+
+ipcMain.on('set-lrc', (evt, lrc) => {
+  appTray.setTitle(lrc)
+});
