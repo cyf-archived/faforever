@@ -245,7 +245,7 @@ class Store {
 
     const cacheKey = song.path.replace(/\/|.mp3/g, '_');
     this.key = song.title;
-    const lrcurl = `https://gitee.com/rojerchen/faforever-lrc/raw/master/${song.title}.lrc`;
+    const lrcurl = `https://bitbucket.org/rojerchen95/faforever-lrc/raw/master/${song.title}.lrc`;
     this.loadLrc(lrcurl, song.title);
     const cachePath = localStorage.getItem('cache-path');
 
