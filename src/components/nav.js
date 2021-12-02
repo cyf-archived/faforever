@@ -3,6 +3,13 @@ import { inject, observer } from 'mobx-react';
 import { Spin, Icon, Tag, Divider, Modal, Input } from 'antd';
 import { Menu, Item, contextMenu } from 'react-contexify';
 
+let shell;
+
+if (window.require) {
+  const electron = window.require('electron');
+  ({ shell } = electron);
+}
+
 @inject('music', 'my')
 @observer
 class Criteria extends React.Component {
@@ -17,9 +24,7 @@ class Criteria extends React.Component {
   }
 
   load = async () => {
-    if (!localStorage['songs']) {
-      await this.props.music.loadCriteria();
-    }
+    await this.props.music.loadCriteria();
     await this.props.music.caculateCached();
   };
 
@@ -33,13 +38,17 @@ class Criteria extends React.Component {
         this.props.my.toggle('ds');
       }
 
+      if (active === 'twitch') {
+        this.props.my.toggle('twitch');
+      }
+
       if (active === 'cache') {
         this.props.music.toggle('__cached__');
         this.props.my.toggle('list');
       }
     } else if (active.uuid) {
       this.setState({
-        active: active.uuid
+        active: active.uuid,
       });
       this.props.music.toggle(active.musics, active.uuid);
       this.props.my.toggle('list');
@@ -125,6 +134,22 @@ class Criteria extends React.Component {
             <li className={active === 'ds' ? 'active' : ''} onClick={this.toggle.bind(this, 'ds')}>
               <span>DS歌单集合</span>
             </li>
+
+            <li
+              className={active === 'twitch' ? 'active' : ''}
+              onClick={this.toggle.bind(this, 'twitch')}
+            >
+              <span>Twitch直播(测试版)</span>
+            </li>
+
+            <li
+              onClick={() => {
+                shell.openExternal('https://chenyifaer.taobao.com/');
+              }}
+            >
+              <span>喜瑞斯</span>
+            </li>
+
             <Divider />
             <li>
               <span style={{ fontWeight: 800 }}>我创建的歌单</span>

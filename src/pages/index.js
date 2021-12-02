@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { NoticeBar } from 'antd-mobile';
 
 import Criteria from '../components/criteria';
+import Twitch from '../components/twitch';
 import List from '../components/musiclist';
 import './index.less';
 
@@ -39,6 +40,7 @@ class Index extends React.Component {
             {note}
           </NoticeBar>
         )}
+        {mode === 'twitch' && <Twitch />}
         {mode === 'ds' && <Criteria />}
         {mode === 'list' && <List />}
       </div>

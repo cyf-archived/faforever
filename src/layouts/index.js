@@ -10,7 +10,6 @@ import Player from '../components/player';
 
 import 'moment/locale/zh-cn';
 // import 'react-contexify/dist/ReactContexify.css';
-
 import stores from '../stores';
 import * as sty from './index.less';
 let ipcRenderer;
@@ -33,7 +32,7 @@ class Index extends React.Component {
       ipcRenderer && ipcRenderer.send('cache-path', cachePath);
     }
     stores.music.loadNote();
-    stores.music.login();
+    // stores.music.login();
   }
 
   minWin = () => {
@@ -86,9 +85,14 @@ class Index extends React.Component {
                   placement="topLeft"
                   title="MAC端 测试版 在开启歌词面板且有歌词情况下，可以在状态栏显示歌词 提取码:bgmr | WIN不支持"
                 >
-                  <span onClick={()=>{
-                    shell.openExternal('https://pan.baidu.com/s/11foxsV9V_9eNjFBwkqXSZQ');
-                  }} style={{ fontSize: 10, cursor: 'pointer' }}>bate</span>
+                  <span
+                    onClick={() => {
+                      shell.openExternal('https://pan.baidu.com/s/11foxsV9V_9eNjFBwkqXSZQ');
+                    }}
+                    style={{ fontSize: 10, cursor: 'pointer' }}
+                  >
+                    bate
+                  </span>
                 </Tooltip>
 
                 <Tooltip
@@ -100,14 +104,14 @@ class Index extends React.Component {
                   </i>
                 </Tooltip>
 
-                <Tooltip
+                {/* <Tooltip
                   placement="topLeft"
                   title="当你发现歌库数据不完整时，可以点这里重新缓存歌曲数据"
                 >
                   <i className="fa-icon" onClick={this.reload}>
                     &#xe6ba;
                   </i>
-                </Tooltip>
+                </Tooltip> */}
 
                 <Icon type="minus" onClick={this.minWin} />
                 <Icon type="close" onClick={this.close} />

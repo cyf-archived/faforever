@@ -13,8 +13,6 @@ import { Spin } from 'antd';
 @inject('music', 'my')
 @observer
 class Criteria extends React.Component {
-
-  
   render() {
     return (
       <div>
@@ -33,17 +31,19 @@ class Criteria extends React.Component {
                   src={`http://magict.cn:5000/webapi/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&album_name=${item.name}&album_artist_name=${item.album_artist}&library=all`}
                 />
                 <span>{item.name}</span>
-                <div className="counter">
-                  {this.props.music.songs[item.name] ? this.props.music.songs[item.name].length : 0}
-                </div>
+                <div className="counter">{item.count}</div>
               </li>
             ))}
           </ul>
-          <p style={{
-            textAlign:'center',
-            fontSize: 12,
-            color: '#d6d5d5'
-          }}>若专辑封面不显示，请点击右上角<span style={{ margin: '0px 6px'}}>☁️</span>标志</p>
+          <p
+            style={{
+              textAlign: 'center',
+              fontSize: 12,
+              color: '#d6d5d5',
+            }}
+          >
+            服务器每小时自动同步一次DS曲库
+          </p>
         </Spin>
       </div>
     );

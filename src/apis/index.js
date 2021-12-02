@@ -42,3 +42,18 @@ export const lrc = url => {
 export const gecimi = title => {
   return request(`http://gecimi.com/api/lyric/${encodeURIComponent(title)}`);
 };
+
+const API = 'http://faforever.eqistu.cn/';
+export const getEntryNew = () => {
+  return request('/criteria', {
+    baseURL: API,
+  });
+};
+export const getSongsNew = name => {
+  return request('/songs', {
+    baseURL: API,
+    params: {
+      name,
+    },
+  });
+};

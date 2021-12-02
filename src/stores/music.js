@@ -7,6 +7,8 @@ import {
   login,
   lrc as lrcApi,
   // gecimi as gecimiApi
+  getEntryNew,
+  getSongsNew,
 } from '../apis';
 import { message } from 'antd';
 
@@ -40,10 +42,12 @@ class Store {
   @observable loginsid;
 
   constructor() {
-    this.criteria = localStorage['criteria'] ? JSON.parse(localStorage['criteria']) : [];
+    // this.criteria = localStorage['criteria'] ? JSON.parse(localStorage['criteria']) : [];
+    this.criteria = [];
     this.current_criteria = {};
     this.current_like = '';
-    this.songs = localStorage['songs'] ? JSON.parse(localStorage['songs']) : {};
+    // this.songs = localStorage['songs'] ? JSON.parse(localStorage['songs']) : {};
+    this.songs = {};
     this.cacheds = [];
     this.current_list = [];
     this.current_songs = [];
@@ -69,13 +73,13 @@ class Store {
     this.loading = false;
   });
 
-  reload = flow(function*() {
-    localStorage.removeItem('criteria');
-    localStorage.removeItem('songs');
-    this.criteria = [];
-    this.songs = {};
-    yield this.loadCriteria();
-  });
+  // reload = flow(function*() {
+  //   localStorage.removeItem('criteria');
+  //   localStorage.removeItem('songs');
+  //   this.criteria = [];
+  //   this.songs = {};
+  //   yield this.loadCriteria();
+  // });
 
   caculateCached = flow(function*() {
     message.loading('整理缓存碎片中...', 0);
@@ -83,6 +87,7 @@ class Store {
       console.log('caculateCached...');
       try {
         const cachepath = localStorage.getItem('cache-path');
+        console.log('cachepath', cachepath);
         const cached = [];
         for (const key in this.songs) {
           if (this.songs.hasOwnProperty(key)) {
@@ -135,6 +140,14 @@ class Store {
 
   loadCriteria = flow(function*() {
     this.loading = true;
+    const { data } = yield getEntryNew();
+    console.log(data);
+    this.criteria = data;
+    yield this.loadAllSongs();
+  });
+
+  loadCriteriaOld = flow(function*() {
+    this.loading = true;
     message.loading('加载缓存，需要一段时间，请耐心等待', 0);
     try {
       const { data } = yield getEntry();
@@ -161,27 +174,18 @@ class Store {
 
   loadLrc = flow(function*(url, title) {
     try {
-      
       this.lrc = (yield lrcApi(url)).data;
     } catch (error) {
-      // const titles = title.split('-');
-      // const song_title = titles[titles.length - 1];
-      // const { data } = yield gecimiApi(song_title.trim());
-      // if (data.result.length > 0) {
-      //   for (const lrcitem of data.result) {
-      //     const lrcstr = (yield lrcApi(lrcitem.lrc)).data;
-      //     const islrc = lrcstr.indexOf('[');
-      //     if (islrc === 0) {
-      //       this.lrc =
-      //         '[00:00.00] 歌词源自 gecimi.com \n[00:00.00] 野生歌词可能不准或错误，请见谅\n[00:00.00] \n' + lrcstr;
-      //       console.log(this.lrc);
-      //       return;
-      //     }
-      //   }
-      // }
       ipcRenderer && ipcRenderer.send('set-lrc', '');
       this.lrc = '';
     }
+  });
+
+  loadAllSongs = flow(function*() {
+    this.loading = true;
+    const { data } = yield getSongsNew();
+    this.songs = data;
+    this.loading = false;
   });
 
   @action toggle = (criteria, like_uuid = false) => {
@@ -245,7 +249,9 @@ class Store {
 
     const cacheKey = song.path.replace(/\/|.mp3/g, '_');
     this.key = song.title;
-    const lrcurl = `https://bitbucket.org/rojerchen95/faforever-lrc/raw/master/${song.title}.lrc`;
+    const lrcurl = `https://bitbucket.org/rojerchen95/faforever-lrc/raw/master/${
+      song.title
+    }.lrc?_t=${new Date().valueOf()}`;
     this.loadLrc(lrcurl, song.title);
     const cachePath = localStorage.getItem('cache-path');
 

@@ -19,7 +19,9 @@
     "react-contexify": "^5.0.0",
     "react-copy-to-clipboard": "^5.0.3",
     "react-dom": "^16.8.6",
-    "uuid": "^8.3.2"
+    "twitch-streamlink-extractor": "^2.0.1",
+    "uuid": "^8.3.2",
+    "video.js": "^7.17.0"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
