@@ -51,10 +51,11 @@ class Criteria extends React.Component {
     this.audio.addEventListener('canplaythrough', () => {
       this.setState({ downloading: false });
     });
-    this.audio.addEventListener('error', () => {
+    this.audio.addEventListener('error', error => {
       this.setState({ downloading: false });
+
       if (this.props.music.url) {
-        message.error(`播放失败，请检查网络/刷新缓存/留意公告。`);
+        message.error(`播放失败。Error :${JSON.stringify(error)}`);
         setTimeout(() => {
           this.props.music.playNext(this.state.mode);
         }, 5000);
@@ -152,7 +153,7 @@ class Criteria extends React.Component {
         {this.props.music.song.additional ? (
           <div className="music-info">
             <img
-              src={`http://magict.cn:5000/webapi/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&album_name=${this.props.music.song.additional.song_tag.album}&album_artist_name=${this.props.music.song.additional.song_tag.album_artist}&library=all`}
+              src={`http://magict.cn:5000/webapi/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&album_name=${this.props.music.song.additional.song_tag.album}&album_artist_name=${this.props.music.song.additional.song_tag.album_artist}&library=all&_sid=${this.props.music.loginsid}`}
               className={`avatar ${this.state.isPlay && 'spin'}`}
               alt=""
             />
@@ -206,10 +207,10 @@ class Criteria extends React.Component {
                               </p>
 
                               <p onClick={this.loadLocalLrc}>
-                                  <span style={{ color: '#0091ff', cursor: 'pointer' }}>
-                                    导入本地LRC歌词
-                                  </span>
-                                </p>
+                                <span style={{ color: '#0091ff', cursor: 'pointer' }}>
+                                  导入本地LRC歌词
+                                </span>
+                              </p>
                             </div>
                           ),
                           onOk: () => {

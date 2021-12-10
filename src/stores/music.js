@@ -7,6 +7,7 @@ import {
   login,
   lrc as lrcApi,
   // gecimi as gecimiApi
+  getSid,
   getEntryNew,
   getSongsNew,
 } from '../apis';
@@ -140,6 +141,9 @@ class Store {
 
   loadCriteria = flow(function*() {
     this.loading = true;
+    const { data: sidData } = yield getSid();
+    console.log('sidData', sidData);
+    this.loginsid = sidData.sid;
     const { data } = yield getEntryNew();
     console.log(data);
     this.criteria = data;
@@ -259,6 +263,7 @@ class Store {
       this.url = 'file://' + cache.path(cacheKey, cachePath);
     } else {
       this.url = download(song.id, this.loginsid);
+      console.log('this.url', this.url);
       if (cache) {
         ipcRenderer && ipcRenderer.send('cache', this.url, cacheKey);
         let t = 0;

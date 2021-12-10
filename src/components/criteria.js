@@ -28,7 +28,7 @@ class Criteria extends React.Component {
               >
                 <img
                   alt=""
-                  src={`http://magict.cn:5000/webapi/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&album_name=${item.name}&album_artist_name=${item.album_artist}&library=all`}
+                  src={`http://magict.cn:5000/webapi/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&album_name=${item.name}&album_artist_name=${item.album_artist}&library=all&_sid=${this.props.music.loginsid}`}
                 />
                 <span>{item.name}</span>
                 <div className="counter">{item.count}</div>

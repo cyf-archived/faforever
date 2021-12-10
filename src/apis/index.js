@@ -44,6 +44,11 @@ export const gecimi = title => {
 };
 
 const API = 'http://faforever.eqistu.cn/';
+export const getSid = () => {
+  return request('/sid', {
+    baseURL: API,
+  });
+};
 export const getEntryNew = () => {
   return request('/criteria', {
     baseURL: API,
