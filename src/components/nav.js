@@ -139,7 +139,7 @@ class Criteria extends React.Component {
               className={active === 'twitch' ? 'active' : ''}
               onClick={this.toggle.bind(this, 'twitch')}
             >
-              <span>Twitch直播(测试版)</span>
+              <span>直播(测试版)</span>
             </li>
 
             <li
