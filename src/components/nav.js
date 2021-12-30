@@ -42,6 +42,10 @@ class Criteria extends React.Component {
         this.props.my.toggle('twitch');
       }
 
+      if (active === 'random') {
+        this.props.my.toggle('random');
+      }
+
       if (active === 'cache') {
         this.props.music.toggle('__cached__');
         this.props.my.toggle('list');
@@ -133,6 +137,13 @@ class Criteria extends React.Component {
           <ul className="criteria">
             <li className={active === 'ds' ? 'active' : ''} onClick={this.toggle.bind(this, 'ds')}>
               <span>DS歌单集合</span>
+            </li>
+
+            <li
+              className={active === 'random' ? 'active' : ''}
+              onClick={this.toggle.bind(this, 'random')}
+            >
+              <span>随机听歌</span>
             </li>
 
             <li

@@ -22,10 +22,8 @@ class Criteria extends React.Component {
     downloading: false,
     percent: 0,
     volume: 0.2,
-    isPlay: false,
     currentTime: 0,
     duration: 0,
-    mode: 1,
     showlist: false,
     showlrc: false,
   };
@@ -40,7 +38,7 @@ class Criteria extends React.Component {
     });
     this.audio.addEventListener('durationchange ', e => {});
     this.audio.addEventListener('ended', () => {
-      this.props.music.playNext(this.state.mode);
+      this.props.music.playNext(this.props.mode);
     });
     this.audio.addEventListener('waiting', () => {
       this.setState({ downloading: true });
@@ -57,7 +55,7 @@ class Criteria extends React.Component {
       if (this.props.music.url) {
         message.error(`播放失败。Error :${JSON.stringify(error)}`);
         setTimeout(() => {
-          this.props.music.playNext(this.state.mode);
+          this.props.music.playNext(this.props.mode);
         }, 5000);
       }
     });
@@ -67,33 +65,29 @@ class Criteria extends React.Component {
       if (this.audio.duration) {
         const percent = (this.audio.currentTime / this.audio.duration) * 100;
         this.setState({
-          currentTime: parseInt(this.audio.currentTime, 10),
+          // currentTime: parseInt(this.audio.currentTime, 10),
           duration: parseInt(this.audio.duration, 10),
           percent,
         });
+        this.props.onCurrentTime(parseInt(this.audio.currentTime, 10));
       }
     }, 100);
   }
 
   play = () => {
     this.setState({
-      isPlay: true,
+      // isPlay: true,
       downloading: false,
     });
+    this.props.onPlay(true);
   };
 
   pause = () => {
-    this.setState({
-      isPlay: false,
-    });
+    this.props.onPlay(false);
   };
 
   toggle = () => {
-    if (this.state.isPlay) {
-      this.audio.pause();
-    } else {
-      this.audio.play();
-    }
+    this.props.togglePlay();
   };
 
   handleChange = value => {
@@ -112,9 +106,7 @@ class Criteria extends React.Component {
   };
 
   toggleMode = mode => {
-    this.setState({
-      mode: mode,
-    });
+    this.props.toggleMode(mode);
   };
 
   loadLocalLrc = () => {
@@ -133,9 +125,10 @@ class Criteria extends React.Component {
       <div className="player">
         <audio
           ref="audio"
+          id="audio"
           autoPlay
           controls
-          loop={this.state.mode === 2}
+          loop={this.props.mode === 2}
           src={this.props.music.url}
         ></audio>
 
@@ -154,7 +147,7 @@ class Criteria extends React.Component {
           <div className="music-info">
             <img
               src={`http://magict.cn:5000/webapi/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&album_name=${this.props.music.song.additional.song_tag.album}&album_artist_name=${this.props.music.song.additional.song_tag.album_artist}&library=all&_sid=${this.props.music.loginsid}`}
-              className={`avatar ${this.state.isPlay && 'spin'}`}
+              className={`avatar ${this.props.isPlay && 'spin'}`}
               alt=""
             />
             <div className="box">
@@ -227,10 +220,10 @@ class Criteria extends React.Component {
                 </Tooltip>
               </div>
               <div className="timer">
-                {Math.floor(Number(this.state.currentTime) / 60)}:
-                {this.state.currentTime % 60 < 10
-                  ? '0' + (this.state.currentTime % 60)
-                  : this.state.currentTime % 60}{' '}
+                {Math.floor(Number(this.props.currentTime) / 60)}:
+                {this.props.currentTime % 60 < 10
+                  ? '0' + (this.props.currentTime % 60)
+                  : this.props.currentTime % 60}{' '}
                 / {Math.floor(Number(this.state.duration) / 60)}:
                 {this.state.duration % 60 < 10
                   ? '0' + (this.state.duration % 60)
@@ -244,7 +237,7 @@ class Criteria extends React.Component {
 
         {this.props.music.lrc && this.state.showlrc && (
           <div className="lrc">
-            <Lrc lrctext={this.props.music.lrc} currentTime={this.state.currentTime} />
+            <Lrc lrctext={this.props.music.lrc} currentTime={this.props.currentTime} />
           </div>
         )}
 
@@ -254,13 +247,13 @@ class Criteria extends React.Component {
             shape="circle"
             icon="step-backward"
             onClick={() => {
-              this.props.music.playPre(this.state.mode);
+              this.props.music.playPre(this.props.mode);
             }}
           />
           <Button
             type="primary"
             shape="circle"
-            icon={this.state.isPlay ? 'pause' : 'caret-right'}
+            icon={this.props.isPlay ? 'pause' : 'caret-right'}
             size="large"
             onClick={this.toggle}
           />
@@ -269,7 +262,7 @@ class Criteria extends React.Component {
             shape="circle"
             icon="step-forward"
             onClick={() => {
-              this.props.music.playNext(this.state.mode);
+              this.props.music.playNext(this.props.mode);
             }}
           />
         </div>
@@ -301,14 +294,7 @@ class Criteria extends React.Component {
             className="playingbox"
             style={{ visibility: this.state.showlist ? 'visible' : 'hidden' }}
           >
-            <Playing
-              mode={this.state.mode}
-              onChange={mode => {
-                this.setState({
-                  mode,
-                });
-              }}
-            />
+            <Playing mode={this.props.mode} onChange={this.toggleMode} />
           </div>
         )}
       </div>

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "concurrently -n=umi,electron -c=blue,green -p=[{name}]  \"umi dev\" \"wait-on http://localhost:8000 && cross-env FA_NODE_ENV=dev electron .\"",
     "build": "umi build",
+    "umi": "umi dev",
     "package:win": "electron-builder --win --ia32 --x64",
     "package:mac": "electron-builder --mac",
     "package:linux": "electron-builder --linux"

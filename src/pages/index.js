@@ -5,20 +5,9 @@ import { NoticeBar } from 'antd-mobile';
 import Criteria from '../components/criteria';
 import Twitch from '../components/twitch';
 import List from '../components/musiclist';
+import Random from '../components/random';
+
 import './index.less';
-
-let remote;
-let cache;
-
-if (window.require) {
-  const electron = window.require('electron');
-  ({ remote } = electron);
-  try {
-    if (remote.require) {
-      cache = remote.require('./cache');
-    }
-  } catch (error) {}
-}
 
 @inject('music', 'my')
 @observer
@@ -27,7 +16,7 @@ class Index extends React.Component {
     const { note } = this.props.music;
     const { mode } = this.props.my;
     return (
-      <div>
+      <div style={{ height: '100%' }}>
         {note && mode === 'ds' && (
           <NoticeBar
             marqueeProps={{
@@ -43,6 +32,7 @@ class Index extends React.Component {
         {mode === 'twitch' && <Twitch />}
         {mode === 'ds' && <Criteria />}
         {mode === 'list' && <List />}
+        {mode === 'random' && <Random />}
       </div>
     );
   }

@@ -1,4 +1,4 @@
-import { observable, flow, action, runInAction, toJS } from 'mobx';
+import { observable, flow, action, runInAction } from 'mobx';
 import {
   getEntry,
   getSongs,
@@ -236,6 +236,10 @@ class Store {
   };
 
   @action play = song => {
+    if (!ipcRenderer) {
+      message.error('因DS服务器资源有限，不允许在线播放噢！');
+      return;
+    }
     this.song = song;
     this.lrc = '';
     this.current_list = this.current_songs.map(i => {

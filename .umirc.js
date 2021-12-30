@@ -9,7 +9,7 @@
 // ref: https://umijs.org/config/
 export default {
   define: {
-    'process.env.VERSION': 'V1.5.1',
+    'process.env.VERSION': 'V1.5.2',
     'process.env.APPNAME': 'FA FOREVER',
   },
   treeShaking: true,
@@ -18,7 +18,10 @@ export default {
     {
       path: '/',
       component: '../layouts/index',
-      routes: [{ path: '/', component: '../pages/index' }],
+      routes: [
+        { path: '/', component: '../pages/index' },
+        // { path: '/twitch', component: '../pages/twitch' }, 存在跨域问题，🙅🏻‍♀️播放，目前还没有解决方案...
+      ],
     },
   ],
   alias: {
