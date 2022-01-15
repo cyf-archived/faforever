@@ -43,7 +43,8 @@ export const gecimi = title => {
   return request(`http://gecimi.com/api/lyric/${encodeURIComponent(title)}`);
 };
 
-const API = 'http://faforever.eqistu.cn/';
+// const API = 'http://faforever.eqistu.cn/';
+const API = 'http://localhost:3001/';
 export const getSid = () => {
   return request('/sid', {
     baseURL: API,
@@ -60,5 +61,11 @@ export const getSongsNew = name => {
     params: {
       name,
     },
+  });
+};
+
+export const getRandom = () => {
+  return request('/random', {
+    baseURL: API,
   });
 };

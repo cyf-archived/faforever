@@ -1,50 +1,16 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, message } from 'antd';
+import { Button } from 'antd';
 import { toJS } from 'mobx';
-import ModeContext from './context';
 
 import style from './random.less';
-let cachedRandomList = null;
 
 const RandomPage = ({ music, my }) => {
-  const { isPlay, toggleMode } = React.useContext(ModeContext);
-
-  const play = () => {
-    if (!cachedRandomList || cachedRandomList.length === 0) return message.error('没有可播放歌曲');
-    const index = Math.floor(Math.random() * cachedRandomList.length);
-    const song = { ...cachedRandomList[index] };
-    music.toggle(cachedRandomList);
-    toggleMode(3);
-    music.play(song);
-  };
-
-  const loadRandomList = () => {
-    let musics = cachedRandomList;
-
-    if (!musics) {
-      musics = [];
-      console.log('no cache random');
-      const titles = Object.keys(music.songs);
-      for (const title of titles) {
-        const songs = music.songs[title];
-        for (const song of songs) {
-          if (song?.additional?.song_audio?.duration / 60 < 7) {
-            musics.push(toJS(song));
-          }
-        }
-      }
-
-      cachedRandomList = musics;
-    }
-
-    if (isPlay) return; // 如果有在播放的列表，那么不进行播放
-
-    play();
-  };
-
   React.useEffect(() => {
-    loadRandomList();
+    if (!music.random) {
+      music.toggleRandom();
+      music.playNext();
+    }
   }, []);
 
   const pic = React.useMemo(() => {
@@ -67,7 +33,7 @@ const RandomPage = ({ music, my }) => {
         <Button
           type="primary"
           onClick={() => {
-            play();
+            music.playNext();
           }}
         >
           随机播放一首

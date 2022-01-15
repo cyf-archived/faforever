@@ -10,6 +10,7 @@ import {
   getSid,
   getEntryNew,
   getSongsNew,
+  getRandom,
 } from '../apis';
 import { message } from 'antd';
 
@@ -41,6 +42,7 @@ class Store {
   @observable note;
   @observable lrc;
   @observable loginsid;
+  @observable random;
 
   constructor() {
     // this.criteria = localStorage['criteria'] ? JSON.parse(localStorage['criteria']) : [];
@@ -59,6 +61,7 @@ class Store {
     this.key = '';
     this.note = '';
     this.loginsid = '';
+    this.random = false;
   }
 
   login = flow(function*() {
@@ -192,7 +195,14 @@ class Store {
     this.loading = false;
   });
 
+  loadRandom = flow(function*() {
+    const { data } = yield getRandom();
+    console.log('random', data);
+    this.play(data);
+  });
+
   @action toggle = (criteria, like_uuid = false) => {
+    this.random = false;
     if (like_uuid) {
       this.current_like = like_uuid;
     } else {
@@ -300,6 +310,11 @@ class Store {
   };
 
   @action playNext = mode => {
+    if (this.random) {
+      this.loadRandom();
+      return;
+    }
+
     if (this.current_list.length > 0 && this.song.id) {
       if (mode === 2) {
         // 单曲
@@ -380,6 +395,9 @@ class Store {
 
     this.current_songs = filterSongs;
     this.current_criteria = '';
+  };
+  @action toggleRandom = () => {
+    this.random = !this.random;
   };
 }
 
