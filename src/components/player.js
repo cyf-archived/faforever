@@ -69,9 +69,9 @@ class Criteria extends React.Component {
           duration: parseInt(this.audio.duration, 10),
           percent,
         });
-        this.props.onCurrentTime(parseInt(this.audio.currentTime, 10));
+        this.props.onCurrentTime(this.audio.currentTime);
       }
-    }, 100);
+    }, 10);
   }
 
   play = () => {
@@ -222,8 +222,8 @@ class Criteria extends React.Component {
               <div className="timer">
                 {Math.floor(Number(this.props.currentTime) / 60)}:
                 {this.props.currentTime % 60 < 10
-                  ? '0' + (this.props.currentTime % 60)
-                  : this.props.currentTime % 60}{' '}
+                  ? '0' + Math.floor(this.props.currentTime % 60)
+                  : Math.floor(this.props.currentTime % 60)}{' '}
                 / {Math.floor(Number(this.state.duration) / 60)}:
                 {this.state.duration % 60 < 10
                   ? '0' + (this.state.duration % 60)
