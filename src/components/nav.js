@@ -38,6 +38,10 @@ class Criteria extends React.Component {
         this.props.my.toggle('ds');
       }
 
+      if (active === 'de') {
+        this.props.my.toggle('de');
+      }
+
       if (active === 'twitch') {
         this.props.my.toggle('twitch');
       }
@@ -151,6 +155,10 @@ class Criteria extends React.Component {
               onClick={this.toggle.bind(this, 'twitch')}
             >
               <span>直播(测试版)</span>
+            </li>
+
+            <li className={active === 'de' ? 'active' : ''} onClick={this.toggle.bind(this, 'de')}>
+              <span>o(*^＠^*)o</span>
             </li>
 
             <li
