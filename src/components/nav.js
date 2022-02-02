@@ -157,9 +157,9 @@ class Criteria extends React.Component {
               <span>直播(测试版)</span>
             </li>
 
-            <li className={active === 'de' ? 'active' : ''} onClick={this.toggle.bind(this, 'de')}>
+            {/* <li className={active === 'de' ? 'active' : ''} onClick={this.toggle.bind(this, 'de')}>
               <span>o(*^＠^*)o</span>
-            </li>
+            </li> */}
 
             <li
               onClick={() => {
