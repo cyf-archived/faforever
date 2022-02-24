@@ -2,7 +2,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Spin, Icon, Tag, Divider, Modal, Input } from 'antd';
 import { Menu, Item, contextMenu } from 'react-contexify';
-
 let shell;
 
 if (window.require) {
@@ -18,6 +17,8 @@ class Criteria extends React.Component {
     mylistVisible: false,
     mylistName: '',
     mylistUuid: null,
+    myUUIDVisible: false,
+    myUUID: '',
   };
   componentDidMount() {
     this.load();
@@ -26,6 +27,7 @@ class Criteria extends React.Component {
   load = async () => {
     await this.props.music.loadCriteria();
     await this.props.music.caculateCached();
+    await this.props.music.loadLike();
   };
 
   toggle = active => {
@@ -54,6 +56,11 @@ class Criteria extends React.Component {
         this.props.music.toggle('__cached__');
         this.props.my.toggle('list');
       }
+
+      if (active === 'like') {
+        this.props.music.toggle(this.props.music.likes, 'system_like');
+        this.props.my.toggle('list');
+      }
     } else if (active.uuid) {
       this.setState({
         active: active.uuid,
@@ -76,6 +83,20 @@ class Criteria extends React.Component {
       mylistVisible: false,
       mylistName: '',
       mylistUuid: null,
+    });
+  };
+
+  closeMyUUID = () => {
+    this.setState({
+      myUUIDVisible: false,
+    });
+  };
+
+  openMyUUID = () => {
+    console.log(global.userUUID);
+    this.setState({
+      myUUIDVisible: true,
+      myUUID: global.userUUID,
     });
   };
 
@@ -109,6 +130,42 @@ class Criteria extends React.Component {
               });
             }}
           />
+        </Modal>
+
+        <Modal
+          visible={this.state.myUUIDVisible}
+          title={'您的UUID'}
+          onCancel={this.closeMyUUID}
+          onOk={() => {
+            if (this.state.myUUID) {
+              global.myUUID = this.state.myUUID;
+              localStorage.uuid = this.state.myUUID;
+            }
+            this.closeMyUUID();
+            this.props.music.loadLike();
+          }}
+        >
+          <Input
+            placeholder="请输入您的UUID"
+            value={this.state.myUUID}
+            onInput={e => {
+              this.setState({
+                myUUID: e.currentTarget.value,
+              });
+            }}
+          />
+          <div
+            style={{
+              fontWeight: 'bold',
+              fontSize: 12,
+              color: 'red',
+              marginTop: 10,
+            }}
+          >
+            <div>* 请设置具有个性化且复杂的UUID避免被别人使用</div>
+            <div>* UUID仅关联“我喜欢的音乐”模块，其他模块会在后续慢慢接入。</div>
+            <div>* UUID请不要设置为自己的常用密码，因为UUID在服务端是明文存储的</div>
+          </div>
         </Modal>
 
         <Menu id="navlist">
@@ -170,12 +227,22 @@ class Criteria extends React.Component {
             </li>
 
             <Divider />
+
             <li>
               <span style={{ fontWeight: 800 }}>我创建的歌单</span>
               <div className="btn" onClick={this.openMylistCreator.bind(this, null, null)}>
                 <Icon type="plus" />
               </div>
             </li>
+
+            <li
+              className={`${active === 'like' ? 'active' : ''} my`}
+              onClick={this.toggle.bind(this, 'like')}
+            >
+              <span>我喜欢的音乐</span>
+              <Tag>{this.props.music.likes?.length ?? 0}</Tag>
+            </li>
+
             {list.map(item => (
               <li
                 key={item.uuid}
@@ -206,6 +273,20 @@ class Criteria extends React.Component {
             </li>
           </ul>
         </Spin>
+
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 10,
+            left: 10,
+            fontSize: 10,
+            opacity: 0.5,
+            cursor: 'pointer',
+          }}
+          onClick={this.openMyUUID}
+        >
+          设置我的UUID
+        </div>
       </div>
     );
   }

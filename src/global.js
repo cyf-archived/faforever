@@ -1,8 +1,16 @@
+import { v4 } from 'uuid';
+
 let ipcRenderer;
 
 if (window.require) {
   const electron = window.require('electron');
   ({ ipcRenderer } = electron);
+}
+
+global.userUUID = localStorage.uuid;
+if (!global.userUUID) {
+  global.userUUID = v4();
+  localStorage.uuid = global.userUUID;
 }
 
 (function() {

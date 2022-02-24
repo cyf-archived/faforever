@@ -11,6 +11,8 @@ import {
   getEntryNew,
   getSongsNew,
   getRandom,
+  getLike,
+  like as likeApi,
 } from '../apis';
 import { message } from 'antd';
 
@@ -43,6 +45,7 @@ class Store {
   @observable lrc;
   @observable loginsid;
   @observable random;
+  @observable likes;
 
   constructor() {
     // this.criteria = localStorage['criteria'] ? JSON.parse(localStorage['criteria']) : [];
@@ -84,6 +87,18 @@ class Store {
   //   this.songs = {};
   //   yield this.loadCriteria();
   // });
+  like = flow(function*(path) {
+    yield likeApi(path);
+    yield this.loadLike();
+  });
+
+  loadLike = flow(function*() {
+    const { data: lklist } = yield getLike();
+    if (this.current_like === 'system_like') {
+      this.toggle(lklist, this.current_like);
+    }
+    this.likes = lklist;
+  });
 
   caculateCached = flow(function*() {
     message.loading('整理缓存碎片中...', 0);

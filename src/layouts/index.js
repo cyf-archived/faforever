@@ -60,7 +60,7 @@ class Index extends React.Component {
 
   setCachePath = () => {
     remote.dialog.showOpenDialog({ properties: ['openDirectory'] }, filename => {
-      if (filename.length === 1) {
+      if (filename && filename.length === 1) {
         // console.log(filename[0]);
         localStorage.setItem('cache-path', filename[0]);
         ipcRenderer && ipcRenderer.send('cache-path', filename[0]);

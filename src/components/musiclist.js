@@ -6,6 +6,7 @@ import { Menu, Item, contextMenu, Submenu } from 'react-contexify';
 import 'moment/locale/zh-cn';
 
 import * as sty from './musiclist.less';
+import Like from './like';
 
 let remote;
 let cache;
@@ -80,6 +81,7 @@ class Index extends React.Component {
           header={
             <List.Item className="header-box">
               <div className="playing" />
+              <div className="playing" />
               <div className="title">标题</div>
               <div className="album">专辑</div>
               <div className="artist">演唱</div>
@@ -109,6 +111,10 @@ class Index extends React.Component {
                   </i>
                 )}
               </div>
+              <div className="playing">
+                <Like path={item.path} />
+              </div>
+
               <div className="title">{item.title}</div>
               <div className="album">{item.additional.song_tag.album}</div>
               <div className="artist">{item.additional.song_tag.artist}</div>

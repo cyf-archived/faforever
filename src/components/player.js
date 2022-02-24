@@ -5,6 +5,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import './player.less';
 import Playing from './playlist';
 import Lrc from './lrc';
+import Like from './like';
 
 let ipcRenderer;
 let shell;
@@ -242,6 +243,15 @@ class Criteria extends React.Component {
         )}
 
         <div className="control">
+          <Like
+            path={this.props.music.song.path}
+            style={{
+              fontSize: '120%',
+              marginRight: 20,
+              visibility: this.props.music.song.path ? 'visible' : 'hidden',
+            }}
+          />
+
           <Button
             type="primary"
             shape="circle"
