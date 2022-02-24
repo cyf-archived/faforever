@@ -93,7 +93,6 @@ class Criteria extends React.Component {
   };
 
   openMyUUID = () => {
-    console.log(global.userUUID);
     this.setState({
       myUUIDVisible: true,
       myUUID: global.userUUID,
@@ -138,7 +137,8 @@ class Criteria extends React.Component {
           onCancel={this.closeMyUUID}
           onOk={() => {
             if (this.state.myUUID) {
-              global.myUUID = this.state.myUUID;
+              console.log(this.state.myUUID);
+              global.userUUID = this.state.myUUID;
               localStorage.uuid = this.state.myUUID;
             }
             this.closeMyUUID();
