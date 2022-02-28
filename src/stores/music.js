@@ -402,7 +402,7 @@ class Store {
     }, []);
 
     const filterSongs = allSongs
-      .filter(song => song.title.indexOf(key) !== -1)
+      .filter(song => song.title.toLocaleLowerCase().indexOf(key.toLocaleLowerCase()) !== -1)
       .map(song => ({
         ...song,
         playing: song.id === this.song.id,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { List, Icon } from 'antd';
+import { List, Icon, Tag, Tooltip } from 'antd';
 import { Menu, Item, contextMenu, Submenu } from 'react-contexify';
 
 import 'moment/locale/zh-cn';
@@ -10,6 +10,12 @@ import Like from './like';
 
 let remote;
 let cache;
+
+const color = count => {
+  if (count > 0 && count < 15) return '';
+  if (count >= 15 && count < 50) return 'orange';
+  if (count >= 50) return 'red';
+};
 
 if (window.require) {
   const electron = window.require('electron');
@@ -115,7 +121,30 @@ class Index extends React.Component {
                 <Like path={item.path} />
               </div>
 
-              <div className="title">{item.title}</div>
+              <div className="title">
+                {item.title}
+                {item.search_key && item?.paths?.length > 0 ? (
+                  <>
+                    &nbsp;
+                    <Tooltip title={`发发共唱了《${item.search_key}》${item?.paths?.length}次`}>
+                      <Tag
+                        onClick={() => {
+                          this.props.music.search(item.search_key);
+                          this.props.my.toggle('list');
+                        }}
+                        style={{
+                          cursor: 'pointer',
+                          fontSize: 10,
+                        }}
+                        color={color(item?.paths?.length)}
+                      >
+                        <Icon type="search" />
+                        {item?.paths?.length ?? 1}次
+                      </Tag>
+                    </Tooltip>
+                  </>
+                ) : null}
+              </div>
               <div className="album">{item.additional.song_tag.album}</div>
               <div className="artist">{item.additional.song_tag.artist}</div>
               <div className="duration">
