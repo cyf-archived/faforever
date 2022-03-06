@@ -15,6 +15,7 @@
   "dependencies": {
     "antd": "^3.19.5",
     "axios": "^0.19.1",
+    "electron-localshortcut": "^3.2.1",
     "mobx": "^5.15.2",
     "mobx-react": "^6.1.5",
     "react": "^16.8.6",
@@ -64,6 +65,7 @@
       ]
     },
     "mac": {
+      "identity": null,
       "icon": "./src/favicon.icns"
     }
   }

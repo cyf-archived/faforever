@@ -47,6 +47,10 @@ export const getSid = () => {
   });
 };
 export const lrc = (url, title) => {
+  if (url && url.indexOf('file') >= 0) {
+    console.log('url', url);
+    return request(url);
+  }
   return request('/lrc', {
     baseURL: API,
     params: { title },
