@@ -196,7 +196,7 @@ class Store {
 
   loadLrc = flow(function*(url, title) {
     try {
-      this.lrc = (yield lrcApi(url)).data;
+      this.lrc = (yield lrcApi(url, title)).data;
     } catch (error) {
       ipcRenderer && ipcRenderer.send('set-lrc', '');
       this.lrc = '';

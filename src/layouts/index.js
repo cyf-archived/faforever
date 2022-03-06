@@ -123,15 +123,17 @@ class Index extends React.Component {
                 <div className="action">
                   <Tooltip
                     placement="topLeft"
-                    title="MAC端 测试版 在开启歌词面板且有歌词情况下，可以在状态栏显示歌词 提取码:bgmr | WIN不支持"
+                    title="安卓TV电视端，可能存在各种不稳定因素，目前测试了小米的是可以运行的。"
                   >
                     <span
                       onClick={() => {
-                        shell.openExternal('https://pan.baidu.com/s/11foxsV9V_9eNjFBwkqXSZQ');
+                        shell.openExternal(
+                          'https://pan.baidu.com/s/1kl_ENZVIKk5ySfoUIluKbQ?pwd=ii9a',
+                        );
                       }}
                       style={{ fontSize: 10, cursor: 'pointer' }}
                     >
-                      bate
+                      安卓TV电视端
                     </span>
                   </Tooltip>
 

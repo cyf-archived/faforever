@@ -126,7 +126,9 @@ class Index extends React.Component {
                 {item.search_key && item?.paths?.length > 0 ? (
                   <>
                     &nbsp;
-                    <Tooltip title={`发发共唱了《${item.search_key}》${item?.paths?.length}次`}>
+                    <Tooltip
+                      title={`发发共唱了《${item.search_key}》${item?.paths?.length}次，点击搜索全部歌曲`}
+                    >
                       <Tag
                         onClick={() => {
                           this.props.music.search(item.search_key);

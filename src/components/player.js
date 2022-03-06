@@ -1,11 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Slider, message, Icon, Modal, Tooltip } from 'antd';
+import { Button, Slider, message, Icon, Modal, Input } from 'antd';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import './player.less';
 import Playing from './playlist';
 import Lrc from './lrc';
 import Like from './like';
+import { contributelrc } from '../apis';
 
 let ipcRenderer;
 let shell;
@@ -27,6 +28,9 @@ class Criteria extends React.Component {
     duration: 0,
     showlist: false,
     showlrc: false,
+    lrcModal: false,
+    lrcContribute: '',
+    lrcTitle: '',
   };
 
   componentDidMount() {
@@ -124,6 +128,43 @@ class Criteria extends React.Component {
   render() {
     return (
       <div className="player">
+        <Modal
+          visible={this.state.lrcModal}
+          onCancel={() => {
+            this.setState({
+              lrcModal: false,
+            });
+          }}
+          confirmLoading={this.state.lrcLoading}
+          onOk={async () => {
+            if (!this.state.lrcContribute || !this.state.lrcTitle) return;
+            this.setState({
+              lrcLoading: true,
+            });
+            try {
+              const { data } = await contributelrc(this.state.lrcTitle, this.state.lrcContribute);
+              message[data.type](data.msg);
+            } catch (error) {
+              message.error('上传失败');
+            }
+
+            this.setState({
+              lrcLoading: false,
+              lrcModal: false,
+            });
+          }}
+          title="贡献歌词"
+        >
+          <Input.TextArea
+            onInput={e => {
+              this.setState({
+                lrcContribute: e.target.value,
+              });
+            }}
+            value={this.state.lrcContribute}
+            style={{ height: '60vh' }}
+          />
+        </Modal>
         <audio
           ref="audio"
           id="audio"
@@ -155,24 +196,40 @@ class Criteria extends React.Component {
               <div className="title">
                 {this.state.downloading ? <Icon type="loading" /> : null}
                 {this.props.music.song.title || '-'}
-                <Tooltip title="双击可导入本地歌词">
+                <span
+                  className="lrc-tag"
+                  onDoubleClick={this.loadLocalLrc}
+                  onClick={() => {
+                    this.setState(
+                      {
+                        showlrc: !this.state.showlrc,
+                      },
+                      () => {
+                        if (!this.state.showlrc) ipcRenderer && ipcRenderer.send('set-lrc', '');
+                      },
+                    );
+                  }}
+                >
+                  词
+                </span>
+
+                <span
+                  className="lrc-tag not-lrc"
+                  onDoubleClick={this.loadLocalLrc}
+                  onClick={() => {
+                    this.setState({
+                      lrcModal: true,
+                      lrcContribute: this.props.music?.lrc ?? '',
+                      lrcTitle: this.props.music.song.title,
+                    });
+                  }}
+                >
+                  贡献歌词
+                </span>
+
+                {/* <Tooltip title="双击可导入本地歌词">
                   {this.props.music.lrc ? (
-                    <span
-                      className="lrc-tag"
-                      onDoubleClick={this.loadLocalLrc}
-                      onClick={() => {
-                        this.setState(
-                          {
-                            showlrc: !this.state.showlrc,
-                          },
-                          () => {
-                            if (!this.state.showlrc) ipcRenderer && ipcRenderer.send('set-lrc', '');
-                          },
-                        );
-                      }}
-                    >
-                      词
-                    </span>
+                    
                   ) : (
                     <span
                       className="not-lrc"
@@ -218,7 +275,7 @@ class Criteria extends React.Component {
                       词
                     </span>
                   )}
-                </Tooltip>
+                </Tooltip> */}
               </div>
               <div className="timer">
                 {Math.floor(Number(this.props.currentTime) / 60)}:

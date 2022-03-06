@@ -15,8 +15,8 @@
     background-color: #fff;
     position: relative;
 
-    .lrc{
-      background-color: #FFFFFF;
+    .lrc {
+      background-color: #ffffff;
       position: absolute;
       width: 300px;
       height: 300px;
@@ -28,8 +28,8 @@
       z-index: 998;
     }
 
-    .playingbox{
-      background-color: #FFFFFF;
+    .playingbox {
+      background-color: #ffffff;
       position: absolute;
       width: 400px;
       height: 400px;
@@ -37,10 +37,9 @@
       right: 6px;
       overflow: auto;
       padding: 8px;
-      border: 1px solid #e8e8e8 ;
+      border: 1px solid #e8e8e8;
       z-index: 998;
     }
-
 
     .control {
       flex-shrink: 0;
@@ -92,20 +91,22 @@
         color: rgba(0, 0, 0, 0.4);
       }
 
-      .lrc-tag, .not-lrc{
+      .lrc-tag,
+      .not-lrc {
         color: #e04f4c;
         margin-left: 10px;
         font-size: 10px;
-        border: 1px solid  #e04f4c;
+        border: 1px solid #e04f4c;
         padding: 0px 2px;
         border-radius: 4px;
         cursor: pointer;
         position: relative;
         top: -2px;
       }
-      .not-lrc{
+      .not-lrc {
         color: gray;
-        border-color: gray;
+        border: none;
+        opacity: 0.5;
       }
     }
 
@@ -122,8 +123,8 @@
       align-items: center;
 
       .ant-slider {
-      width: 70px;
-      flex-grow: 1;
+        width: 70px;
+        flex-grow: 1;
       }
     }
 

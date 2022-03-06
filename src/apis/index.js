@@ -35,10 +35,6 @@ export const note = () => {
   return request(`http://cdn.eqistu.cn/faforever/note.txt?t=${new Date().valueOf()}`);
 };
 
-export const lrc = url => {
-  return request(url);
-};
-
 export const gecimi = title => {
   return request(`http://gecimi.com/api/lyric/${encodeURIComponent(title)}`);
 };
@@ -50,6 +46,20 @@ export const getSid = () => {
     baseURL: API,
   });
 };
+export const lrc = (url, title) => {
+  return request('/lrc', {
+    baseURL: API,
+    params: { title },
+  });
+};
+export const contributelrc = (title, lrc) => {
+  return request('/lrc', {
+    baseURL: API,
+    method: 'POST',
+    data: { title, lrc },
+  });
+};
+
 export const getEntryNew = () => {
   return request('/criteria', {
     baseURL: API,
