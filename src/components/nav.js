@@ -207,12 +207,12 @@ class Criteria extends React.Component {
               <span>随机听歌</span>
             </li>
 
-            <li
+            {/* <li
               className={active === 'twitch' ? 'active' : ''}
               onClick={this.toggle.bind(this, 'twitch')}
             >
               <span>直播(测试版)</span>
-            </li>
+            </li> */}
 
             {/* <li className={active === 'de' ? 'active' : ''} onClick={this.toggle.bind(this, 'de')}>
               <span>o(*^＠^*)o</span>
