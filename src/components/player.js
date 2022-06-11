@@ -58,10 +58,10 @@ class Criteria extends React.Component {
       this.setState({ downloading: false });
 
       if (this.props.music.url) {
-        message.error(`播放失败。Error :${JSON.stringify(error)}`);
+        message.error(`播放失败。尝试重新下载播放`);
         setTimeout(() => {
-          this.props.music.playNext(this.props.mode);
-        }, 5000);
+          this.props.music.play(this.props.music.song, true);
+        }, 100);
       }
     });
 

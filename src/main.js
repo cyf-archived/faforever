@@ -41,6 +41,7 @@ function createWindow() {
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
   } else {
+    if (process.env.FA_NODE_ENV === 'preview') mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`http://cdn.eqistu.cn/faforever13/index.html?t=${new Date().valueOf()}`);
   }
   // and load the index.html of the app.

@@ -9,7 +9,7 @@
 // ref: https://umijs.org/config/
 export default {
   define: {
-    'process.env.VERSION': 'V1.5.3',
+    'process.env.VERSION': 'V1.5.4',
     'process.env.APPNAME': 'FA FOREVER',
     'process.env.APIHOST': 'http://faforever.eqistu.cn/',
   },

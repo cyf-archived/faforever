@@ -159,9 +159,13 @@ class Store {
 
   loadCriteria = flow(function*() {
     this.loading = true;
-    const { data: sidData } = yield getSid();
-    console.log('sidData', sidData);
-    this.loginsid = sidData.sid;
+    const res = yield login();
+    if (res.data.success) {
+      this.loginsid = res.data.data.sid;
+    } else {
+      const { data: sidData } = yield getSid();
+      this.loginsid = sidData;
+    }
     const { data } = yield getEntryNew();
     console.log(data);
     this.criteria = data;
@@ -260,7 +264,7 @@ class Store {
     }
   };
 
-  @action play = song => {
+  @action play = (song, recache = false) => {
     if (!ipcRenderer) {
       message.error('因DS服务器资源有限，不允许在线播放噢！');
       return;
@@ -288,7 +292,7 @@ class Store {
     this.loadLrc(lrcurl, song.title);
     const cachePath = localStorage.getItem('cache-path');
 
-    if (cache && cache.exist(cacheKey, cachePath)) {
+    if (cache && cache.exist(cacheKey, cachePath) && !recache) {
       this.url = 'file://' + cache.path(cacheKey, cachePath);
     } else {
       this.url = download(song.id, this.loginsid);
