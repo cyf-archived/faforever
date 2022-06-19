@@ -99,3 +99,8 @@ export const like = path => {
     },
   });
 };
+export const getHot = () => {
+  return request('/hot', {
+    baseURL: API,
+  });
+};

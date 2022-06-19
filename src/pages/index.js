@@ -7,6 +7,7 @@ import Twitch from '../components/twitch';
 import List from '../components/musiclist';
 import Random from '../components/random';
 import De from '../components/de';
+import Rank from '../components/rank';
 
 import './index.less';
 
@@ -33,6 +34,7 @@ class Index extends React.Component {
         {mode === 'twitch' && <Twitch />}
         {mode === 'ds' && <Criteria />}
         {mode === 'list' && <List />}
+        {mode === 'rank' && <Rank />}
         {mode === 'random' && <Random />}
         {mode === 'de' && <De />}
       </div>

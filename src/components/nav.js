@@ -48,6 +48,10 @@ class Criteria extends React.Component {
         this.props.my.toggle('twitch');
       }
 
+      if (active === 'rank') {
+        this.props.my.toggle('rank');
+      }
+
       if (active === 'random') {
         this.props.my.toggle('random');
       }
@@ -217,6 +221,13 @@ class Criteria extends React.Component {
             {/* <li className={active === 'de' ? 'active' : ''} onClick={this.toggle.bind(this, 'de')}>
               <span>o(*^＠^*)o</span>
             </li> */}
+
+            <li
+              className={active === 'rank' ? 'active' : ''}
+              onClick={this.toggle.bind(this, 'rank')}
+            >
+              <span>排行榜</span>
+            </li>
 
             <li
               onClick={() => {
