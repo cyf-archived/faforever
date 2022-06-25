@@ -159,13 +159,18 @@ class Store {
 
   loadCriteria = flow(function*() {
     this.loading = true;
-    const res = yield login();
-    if (res.data.success) {
-      this.loginsid = res.data.data.sid;
-    } else {
-      const { data: sidData } = yield getSid();
-      this.loginsid = sidData;
+    try {
+      const res = yield login();
+      if (res.data.success) {
+        this.loginsid = res.data.data.sid;
+      } else {
+        const { data: sidData } = yield getSid();
+        this.loginsid = sidData;
+      }
+    } catch (error) {
+      console.log(error);
     }
+
     const { data } = yield getEntryNew();
     console.log(data);
     this.criteria = data;
