@@ -4,6 +4,7 @@ import { Button } from 'antd';
 import { toJS } from 'mobx';
 
 import style from './random.less';
+import { baseURL } from '../apis/request';
 
 const RandomPage = ({ music, my }) => {
   React.useEffect(() => {
@@ -16,7 +17,7 @@ const RandomPage = ({ music, my }) => {
   const pic = React.useMemo(() => {
     const song = toJS(music.song);
     if (!song || !song.additional) return null;
-    return `http://magict.cn:5000/webapi/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&album_name=${song.additional.song_tag.album}&album_artist_name=${song.additional.song_tag.album_artist}&library=all&_sid=${music.loginsid}`;
+    return `${baseURL}:5000/webapi/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&album_name=${song.additional.song_tag.album}&album_artist_name=${song.additional.song_tag.album_artist}&library=all&_sid=${music.loginsid}`;
   }, [music.song]);
 
   const title = React.useMemo(() => {

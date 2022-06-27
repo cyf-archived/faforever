@@ -163,12 +163,9 @@ class Store {
       const res = yield login();
       if (res.data.success) {
         this.loginsid = res.data.data.sid;
-      } else {
-        const { data: sidData } = yield getSid();
-        this.loginsid = sidData;
       }
     } catch (error) {
-      console.log(error);
+      message.error('登录失败，您的网络可能不支持ipv6');
     }
 
     const { data } = yield getEntryNew();

@@ -121,6 +121,17 @@ class Index extends React.Component {
                 />
 
                 <div className="action">
+                  <Tooltip placement="topLeft" title="看看自己是否支持ipv6">
+                    <span
+                      onClick={() => {
+                        shell.openExternal('http://test.ipv6.fastweb.it/');
+                      }}
+                      style={{ fontSize: 10, cursor: 'pointer', marginRight: 12 }}
+                    >
+                      IPV6测试
+                    </span>
+                  </Tooltip>
+
                   <Tooltip
                     placement="topLeft"
                     title="安卓TV电视端，可能存在各种不稳定因素，目前测试了小米的是可以运行的。"

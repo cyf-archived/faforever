@@ -1,4 +1,4 @@
-import request from './request';
+import request, { baseURL } from './request';
 
 // 获取列表
 export const getEntry = () => {
@@ -28,7 +28,7 @@ export const login = () => {
 
 // 下载
 export const download = (id, sid) => {
-  return `https://magict.cn:5001/webapi/AudioStation/stream.cgi?api=SYNO.AudioStation.Stream&method=stream&version=1&id=${id}&_sid=${sid}&ext=.mp3`;
+  return `${baseURL}/AudioStation/stream.cgi?api=SYNO.AudioStation.Stream&method=stream&version=1&id=${id}&_sid=${sid}&ext=.mp3`;
 };
 
 export const note = () => {

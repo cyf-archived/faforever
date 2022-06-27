@@ -7,6 +7,7 @@ import Playing from './playlist';
 import Lrc from './lrc';
 import Like from './like';
 import { contributelrc } from '../apis';
+import { baseURL } from '../apis/request';
 
 let ipcRenderer;
 let shell;
@@ -188,7 +189,7 @@ class Criteria extends React.Component {
         {this.props.music.song.additional ? (
           <div className="music-info">
             <img
-              src={`http://magict.cn:5000/webapi/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&album_name=${this.props.music.song.additional.song_tag.album}&album_artist_name=${this.props.music.song.additional.song_tag.album_artist}&library=all&_sid=${this.props.music.loginsid}`}
+              src={`${baseURL}/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&album_name=${this.props.music.song.additional.song_tag.album}&album_artist_name=${this.props.music.song.additional.song_tag.album_artist}&library=all&_sid=${this.props.music.loginsid}`}
               className={`avatar ${this.props.isPlay && 'spin'}`}
               alt=""
             />

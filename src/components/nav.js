@@ -107,7 +107,7 @@ class Criteria extends React.Component {
     const { active, mylistVisible = false, mylistName = '', mylistUuid = null } = this.state;
     const { list = [] } = this.props.my;
     return (
-      <div style={{ overflowY: 'auto' }}>
+      <div style={{ overflowY: 'auto', '-webkit-app-region': 'no-drag' }}>
         <Modal
           visible={mylistVisible}
           title={mylistUuid ? '修改歌单名称' : '创建您的本地歌单'}
