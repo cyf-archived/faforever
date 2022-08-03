@@ -13,6 +13,7 @@ import 'moment/locale/zh-cn';
 // import 'react-contexify/dist/ReactContexify.css';
 import stores from '../stores';
 import * as sty from './index.less';
+import axios from 'axios';
 let ipcRenderer;
 let remote;
 let shell;
@@ -31,6 +32,7 @@ class Index extends React.Component {
     mode: 1,
     isPlay: false,
     currentTime: 0,
+    ipvx: '',
   };
   componentDidMount() {
     const cachePath = localStorage.getItem('cache-path');
@@ -39,6 +41,21 @@ class Index extends React.Component {
     }
     stores.music.loadNote();
     // stores.music.login();
+    axios.get('https://test.ipw.cn/api/ip/myip?json').then(res => {
+      const {
+        data: { IPVersion },
+      } = res;
+
+      if ('IPv6'.toLowerCase() !== IPVersion.toLowerCase()) {
+        Modal.error({
+          title: '网路不支持',
+          content: `您的网络为：${IPVersion}，不支持在线听歌。仅IPV6支持在线听歌。`,
+        });
+      }
+      this.setState({
+        ipvx: IPVersion,
+      });
+    });
   }
 
   minWin = () => {
@@ -124,11 +141,11 @@ class Index extends React.Component {
                   <Tooltip placement="topLeft" title="看看自己是否支持ipv6">
                     <span
                       onClick={() => {
-                        shell.openExternal('http://test.ipv6.fastweb.it/');
+                        shell.openExternal('https://ipw.cn/ipv6/');
                       }}
                       style={{ fontSize: 10, cursor: 'pointer', marginRight: 12 }}
                     >
-                      IPV6测试
+                      您的网络：{this.state.ipvx}
                     </span>
                   </Tooltip>
 

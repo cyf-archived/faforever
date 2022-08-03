@@ -23,6 +23,9 @@ export const getSongs = (album, album_artist) => {
 export const login = () => {
   return request(
     '/auth.cgi?api=SYNO.API.Auth&version=3&method=login&account=cyfwlp&passwd=5267373&session=AudioStation&format=cookie',
+    {
+      timeout: 5000,
+    },
   );
 };
 
